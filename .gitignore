@@ -1,0 +1,11 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# AI
+CLAUDE.md
+.claude/
+plans/
+
+# Assets
+assets/
