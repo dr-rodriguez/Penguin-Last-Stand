@@ -1,55 +1,55 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dmd5smbftund8"]
 
-[node name="MainGame" type="Node"]
+[node name="MainGame" type="Node" unique_id=1481109489]
 process_mode = 3
 
-[node name="Systems" type="Node" parent="."]
+[node name="Systems" type="Node" parent="." unique_id=1217314786]
 
-[node name="World" type="Node2D" parent="."]
+[node name="World" type="Node2D" parent="." unique_id=986561419]
 process_mode = 1
 
-[node name="LevelRoot" type="Node2D" parent="World"]
+[node name="LevelRoot" type="Node2D" parent="World" unique_id=2005561002]
 
-[node name="EntityRoot" type="Node2D" parent="World"]
+[node name="EntityRoot" type="Node2D" parent="World" unique_id=741512712]
 
-[node name="EffectRoot" type="Node2D" parent="World"]
+[node name="EffectRoot" type="Node2D" parent="World" unique_id=1401247462]
 
-[node name="HudLayer" type="CanvasLayer" parent="."]
+[node name="HudLayer" type="CanvasLayer" parent="." unique_id=9410596]
 process_mode = 1
 layer = 10
 
-[node name="HudRoot" type="Control" parent="HudLayer"]
+[node name="HudRoot" type="Control" parent="HudLayer" unique_id=125520429]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="PauseLayer" type="CanvasLayer" parent="."]
+[node name="PauseLayer" type="CanvasLayer" parent="." unique_id=1679763196]
 process_mode = 2
 layer = 20
 
-[node name="PauseRoot" type="Control" parent="PauseLayer"]
+[node name="PauseRoot" type="Control" parent="PauseLayer" unique_id=13074149]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="TransitionLayer" type="CanvasLayer" parent="."]
+[node name="TransitionLayer" type="CanvasLayer" parent="." unique_id=598219935]
 process_mode = 3
 layer = 100
 
-[node name="TransitionRoot" type="Control" parent="TransitionLayer"]
+[node name="TransitionRoot" type="Control" parent="TransitionLayer" unique_id=1265130052]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="DebugLayer" type="CanvasLayer" parent="."]
+[node name="DebugLayer" type="CanvasLayer" parent="." unique_id=1927265430]
 process_mode = 3
 layer = 120
 visible = false
 
-[node name="DebugRoot" type="Control" parent="DebugLayer"]
+[node name="DebugRoot" type="Control" parent="DebugLayer" unique_id=1254802738]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
