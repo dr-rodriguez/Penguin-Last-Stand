@@ -1,0 +1,73 @@
+extends TileMapLayer
+
+## Noise generator
+var noise := FastNoiseLite.new()
+
+# Dimensions of each generated chunk
+var width: int = 64
+var height: int = 64
+
+# Noise thresholds
+var water_cutoff: float = 0.3
+var dirt_cutoff: float = 0.4
+var grass_cutoff: float = 0.7
+# rock_cutoff not used- anything higher than grass is rock
+
+
+func _ready() -> void:
+	noise.set_noise_type(FastNoiseLite.TYPE_SIMPLEX_SMOOTH)
+	
+	noise.set_seed(randi())
+	noise.set_frequency(0.02) # lower is smoother
+	noise.set_fractal_octaves(3)  # from docs: number of noise layers that are sampled to get the final value
+	
+	# Generate chunk
+	generate_chunk()
+	print("[MapArea] Generated chunk")
+
+
+## Generate a chunk based on noise values
+func generate_chunk() -> void:
+	# TODO: replace with logic that generates full tileable map
+	
+	var pos = Vector2i.ZERO
+	
+	# Get properties of the TileSet
+	var tilepos: Vector2i
+	var atlaspos: Vector2i
+	var span: int = 3  # how many variants of each terrain
+	
+	# Loop over the width/height to generate all the tiles
+	for x in range(width):
+		for y in range(height):
+			# Location of the tile to generate
+			tilepos = Vector2i(pos.x - (width/2.) + x, pos.y - (height/2.) + y)
+			
+			# Generate noise values, these are -1 to 1
+			var a = noise.get_noise_2d(tilepos.x, tilepos.y)
+			# Scale noise to be 0 to 1
+			a = (a + 1.0) / 2.0
+			
+			# Get the terrain using the cutoff thresholds
+			var atlas_y: int = _classify(a)
+			# Randomize which tile of that terraint to use
+			var atlas_x: int = randi_range(0, span - 1)
+			
+			atlaspos = Vector2i(atlas_x, atlas_y)
+			
+			print("[MapArea] " + str(tilepos) + " " + str(atlaspos) + " " + str(atlas_y) + " " + str(a))
+			
+			set_cell(tilepos, 0, atlaspos)
+
+
+## Classify noise into the different terrain types based on cutoff thresholds
+func _classify(v: float) -> int:
+	var atlasi: int = 2  # default is rock
+	if v < water_cutoff:
+		atlasi = 3  # grass altasi
+	elif v < dirt_cutoff:
+		atlasi = 1  # dirt atlasi
+	elif v < grass_cutoff:
+		atlasi = 0  # grass atlasi
+	
+	return atlasi
