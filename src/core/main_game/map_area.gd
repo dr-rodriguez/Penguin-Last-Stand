@@ -3,10 +3,19 @@ extends TileMapLayer
 # This script generates the map procedurally. 
 # We use PERIOD as the size of each tile and repeat it as the player moves through the world.
 
+# Noise thresholds as export values
+## Water threshold
+@export var water_threshold: float = 0.2
+## Dirt threshold
+@export var dirt_threshold: float = 0.4
+## Grass threshold
+@export var grass_threshold: float = 0.85
+# rock_cutoff not used- anything higher than grass is rock
+
 ## Tiles per wrap
-const PERIOD: int = 16
+const PERIOD: int = 128
 ## Tiles per chunk edge
-const CHUNK: int = 8
+const CHUNK: int = 16
 ## Number of chunks around the player
 const LOAD_RADIUS: int = 2
 ## Number of varient versions of each terrain
@@ -34,28 +43,23 @@ var _loaded: Dictionary = {}
 ## Noise generator
 var noise := FastNoiseLite.new()
 
-# Dimensions of each generated chunk
-var width: int = 64
-var height: int = 64
-
-# Noise thresholds
-## Water cutoff threshold
-@export var water_cutoff: float = 0.2
-## Dirt cutoff threshold
-@export var dirt_cutoff: float = 0.3
-## Grass cutoff threshold
-@export var grass_cutoff: float = 0.6
-# rock_cutoff not used- anything higher than grass is rock
+# Noise cutoff values for terrain
+var water_cutoff: float
+var dirt_cutoff: float
+var grass_cutoff: float
 
 
 func _ready() -> void:
 	# Generate tiles from noise
 	_bake_noise()
 	
+	print("[MapArea] Generated map tiles")
+
+
+func _process(_delta: float) -> void:
 	# Load chunks around player, unload those far away
 	_refresh(_player_chunk())
-	
-	print("[MapArea] Generated map tiles")
+
 
 ## Bake the noise into the _tiles array
 func _bake_noise() -> void:
@@ -93,9 +97,16 @@ func _bake_noise() -> void:
 				+ noise.get_noise_2d(x - PERIOD, y - PERIOD)  * fx         * fy
 				)
 			
-			print(x, " ", y, " ", noise_value, " ", (noise_value + 1.0) / 2.0)
 			# Scale noise to 0.0 to 1.0 (instead of -1 to 1)
-			field[x * PERIOD + y] = (noise_value + 1.0) / 2.0
+			field[x * PERIOD + y] = noise_value
+	
+	# Determine exact cutoff values from percentages
+	var sorted := field.duplicate()
+	sorted.sort()
+	var n := sorted.size()
+	water_cutoff = sorted[int(n * water_threshold)]
+	dirt_cutoff = sorted[int(n * dirt_threshold)]
+	grass_cutoff = sorted[int(n * grass_threshold)]
 	
 	# Classify into byte array (indicating terrain type)
 	for i in field.size():
