@@ -9,12 +9,24 @@ const PERIOD: int = 16
 const CHUNK: int = 8
 ## Number of chunks around the player
 const LOAD_RADIUS: int = 2
+## Number of varient versions of each terrain
+const VARIANTS: int = 3
+## Source ID for TileSet
+const SOURCE_ID: int = 0
+
+## Terrain possibilities
+enum Terrain {GRASS, DIRT, ROCK, WATER}
+# These are effectively ints, so Terrain.GRASS == 0
 
 ## Player character scene
 @export var _player: CharacterBody2D
 
 ## Tile storage (noise values for the tile)
 var _tiles: PackedByteArray
+# Unpacking notes for _tiles and similar arrays:
+# i = y * PERIOD + x          # cell -> index
+# x = i % PERIOD              # index -> cell
+# y = i / PERIOD              # integer division
 
 ## Dictionary of loaded chunks (keys are Vector2i coords, values are true/false)
 var _loaded: Dictionary = {}
@@ -27,13 +39,35 @@ var width: int = 64
 var height: int = 64
 
 # Noise thresholds
-var water_cutoff: float = 0.3
-var dirt_cutoff: float = 0.4
-var grass_cutoff: float = 0.7
+## Water cutoff threshold
+@export var water_cutoff: float = 0.2
+## Dirt cutoff threshold
+@export var dirt_cutoff: float = 0.3
+## Grass cutoff threshold
+@export var grass_cutoff: float = 0.6
 # rock_cutoff not used- anything higher than grass is rock
 
 
 func _ready() -> void:
+	# Generate tiles from noise
+	_bake_noise()
+	
+	# Load chunks around player, unload those far away
+	_refresh(_player_chunk())
+	
+	print("[MapArea] Generated map tiles")
+
+## Bake the noise into the _tiles array
+func _bake_noise() -> void:
+	var noise_value: float
+	var terrain: int
+	var variant: int
+	var fx: float
+	var fy: float
+	## Temporary float field with noise values
+	var field := PackedFloat32Array()
+	field.resize(PERIOD * PERIOD)
+	
 	# Set noise parameters
 	noise.set_noise_type(FastNoiseLite.TYPE_SIMPLEX_SMOOTH)
 	noise.set_seed(randi())
@@ -43,100 +77,124 @@ func _ready() -> void:
 	# Set up tile storage
 	_tiles.resize(PERIOD * PERIOD)
 	
-	# Get the position of the player local to the TileMap and scale it to CHUNK
-	var center := local_to_map(to_local(_player.global_position)) / CHUNK
-	_refresh(center)
+	# Generate over all x/y values within the PERIOD
+	for x in range(PERIOD):
+		for y in range(PERIOD):
+			# x/y scaled by PERIOD (so 0.0 to 1.0)
+			fx = float(x) / PERIOD
+			fy = float(y) / PERIOD
+			
+			# Make noise symmetric
+			# Biliniar blend of four offset copies
+			noise_value = (
+				noise.get_noise_2d(x, y)                      * (1.0 - fx) * (1.0 - fy)
+				+ noise.get_noise_2d(x - PERIOD, y)           * fx         * (1.0 - fy)
+				+ noise.get_noise_2d(x, y - PERIOD)           * (1.0 - fx) * fy
+				+ noise.get_noise_2d(x - PERIOD, y - PERIOD)  * fx         * fy
+				)
+			
+			print(x, " ", y, " ", noise_value, " ", (noise_value + 1.0) / 2.0)
+			# Scale noise to 0.0 to 1.0 (instead of -1 to 1)
+			field[x * PERIOD + y] = (noise_value + 1.0) / 2.0
 	
-	# Generate chunk (old code)
-	generate_chunk()
-	
-	print("[MapArea] Generated map tiles")
+	# Classify into byte array (indicating terrain type)
+	for i in field.size():
+		terrain = _classify(field[i])
+		variant = randi_range(0, VARIANTS - 1)
+		_tiles[i] = terrain * VARIANTS + variant
+
 
 ## Load/unload chunks as needed based on player position
 func _refresh(center: Vector2i) -> void:
-	pass
+	# Check for loaded chanks that are too far away- unload them
+	for c: Vector2i in _loaded.keys():
+		if absi(c.x - center.x) > LOAD_RADIUS or absi(c.y - center.y) > LOAD_RADIUS:
+			_unload_chunk(c)
+	
+	# Load chunks close to the player
+	for dy: int in range(-LOAD_RADIUS, LOAD_RADIUS + 1):
+		for dx: int in range(-LOAD_RADIUS, LOAD_RADIUS + 1):
+			var c: Vector2i = center + Vector2i(dx, dy)
+			if not _loaded.has(c):
+				_load_chunk(c)
 
+
+## Helper method to determine which chunk the player is in
+func _player_chunk() -> Vector2i:
+	var cell := local_to_map(to_local(_player.global_position))
+	return Vector2i(
+		floori(cell.x / float(CHUNK)), 
+		floori(cell.y / float(CHUNK))
+	)
+	
 
 ## Helper method to load chunks at position c
 func _load_chunk(c: Vector2i) -> void:
+	var world: Vector2i
+	var atlas_tile: Vector2i
+	
 	# Loop over x/y for CHUNK
-	# For each, get the world i coordinates
-	# Get the terrain for that coordinate using the tile_at method
-	# Use set_cell to set the image based on that value
-	pass
+	for x in range(CHUNK):
+		for y in range(CHUNK):
+			# For each, get the world i coordinates
+			world = Vector2i(c.x * CHUNK + x, c.y * CHUNK + y)
+			
+			# Get the terrain for that coordinate using the tile_at method
+			atlas_tile = tile_at(world.x, world.y)
+			
+			# Use set_cell to set the image based on that value
+			set_cell(world, SOURCE_ID, atlas_tile)
+	
+	# Store flag that this position is loaded
+	_loaded[c] = true
 
 
 ## Helper method to unload chunks at position c
 func _unload_chunk(c: Vector2i) -> void:
 	# Like load_chunk but simpler
+	var world: Vector2i
+	
 	# Loop over x/y for CHUNK
-	# For each, get the world i coordinates
-	# Call erase_cell at that location
-	pass
-
-
-## Generate the noise to be stored for later recall
-func _generate_noise() -> void:
-	# TODO: Review this, not sure if it is correct
+	for x in range(CHUNK):
+		for y in range(CHUNK):
+			# For each, get the world i coordinates
+			world = Vector2i(c.x * CHUNK + x, c.y * CHUNK + y)
+			
+			# Call erase_cell at that location
+			erase_cell(world)
 	
-	# Loop over x/y for the PERIOD
-	for x in range(PERIOD):
-		for y in range(PERIOD):
-			# Generate noise at that location
-			var a = noise.get_noise_2d(x, y)
-			# Scale noise to be 0 to 1
-			a = (a + 1.0) / 2.0
-			# Store it in tiles
-			_tiles[y*PERIOD + x] = a
-
-## Generate a chunk based on noise values (old)
-func generate_chunk() -> void:
-	# TODO: replace with logic that generates full tileable map
-	
-	var pos = Vector2i.ZERO
-	
-	# Get properties of the TileSet
-	var tilepos: Vector2i
-	var atlaspos: Vector2i
-	var span: int = 3  # how many variants of each terrain
-	
-	# Loop over the width/height to generate all the tiles
-	for x in range(PERIOD):
-		for y in range(PERIOD):
-			# Location of the tile to generate
-			tilepos = Vector2i(pos.x - (width/2.) + x, pos.y - (height/2.) + y)
-			
-			# Generate noise values, these are -1 to 1
-			var a = noise.get_noise_2d(tilepos.x, tilepos.y)
-			# Scale noise to be 0 to 1
-			a = (a + 1.0) / 2.0
-			
-			# Get the terrain using the cutoff thresholds
-			var atlas_y: int = _classify(a)
-			# Randomize which tile of that terraint to use
-			var atlas_x: int = randi_range(0, span - 1)
-			
-			atlaspos = Vector2i(atlas_x, atlas_y)
-			
-			#print("[MapArea] " + str(tilepos) + " " + str(atlaspos) + " " + str(atlas_y) + " " + str(a))
-			
-			set_cell(tilepos, 0, atlaspos)
+	# Erase the record that we've loaded this position
+	_loaded.erase(c)
 
 
 ## Classify noise into the different terrain types based on cutoff thresholds
-func _classify(v: float) -> int:
-	var atlasi: int = 2  # default is rock
+func _classify(v: float) -> Terrain:
 	if v < water_cutoff:
-		atlasi = 3  # grass altasi
+		return Terrain.WATER
 	elif v < dirt_cutoff:
-		atlasi = 1  # dirt atlasi
+		return Terrain.DIRT
 	elif v < grass_cutoff:
-		atlasi = 0  # grass atlasi
+		return Terrain.GRASS
+	else:
+		return Terrain.ROCK
+
+
+## Helper method to fetch atlas coordinates at specified location
+func tile_at(x: int, y: int) -> Vector2i:
+	# Unpacking notes:
+	# i = y * PERIOD + x          # cell -> index
+	# x = i % PERIOD              # index -> cell
+	# y = i / PERIOD              # integer division
 	
-	return atlasi
-
-
-## Helper method to fetch tile at specified position
-func tile_at(x: int, y: int) -> int:
 	# posmod for the positive variant of the modulus operator
-	return _tiles[posmod(y, PERIOD) * PERIOD + posmod(x, PERIOD)]
+	var packed: int = _tiles[posmod(y, PERIOD) * PERIOD + posmod(x, PERIOD)]
+	# Unpack index values for the atlas
+	@warning_ignore("integer_division")
+	return Vector2i(packed % VARIANTS, packed / VARIANTS)
+
+
+## Helper method like tile_at but only carring about type of terrain
+func terrain_at(x: int, y: int) -> int:
+	# Get y-value of Atlas only (type of terrain)
+	@warning_ignore("integer_division")
+	return _tiles[posmod(y, PERIOD) * PERIOD + posmod(x, PERIOD)] / VARIANTS
