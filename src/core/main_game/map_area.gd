@@ -66,42 +66,37 @@ func _process(_delta: float) -> void:
 
 ## Bake the noise into the _tiles array
 func _bake_noise() -> void:
-	var noise_value: float
-	var terrain: int
-	var variant: int
-	var fx: float
-	var fy: float
 	## Temporary float field with noise values
 	var field := PackedFloat32Array()
 	field.resize(PERIOD * PERIOD)
-	
+
 	# Set noise parameters
 	## Noise generator
 	var noise := FastNoiseLite.new()
-	noise.set_noise_type(FastNoiseLite.TYPE_SIMPLEX_SMOOTH)
-	noise.set_seed(randi())
-	noise.set_frequency(0.02) # lower is smoother
-	noise.set_fractal_octaves(3)  # from docs: number of noise layers that are sampled to get the final value
-	
+	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
+	noise.seed = randi()
+	noise.frequency = 0.02 # lower is smoother
+	noise.fractal_octaves = 3  # from docs: number of noise layers that are sampled to get the final value
+
 	# Set up tile storage
 	_tiles.resize(PERIOD * PERIOD)
-	
+
 	# Generate over all x/y values within the PERIOD
-	for y: int in range(PERIOD):
-		for x: int in range(PERIOD):
+	for y: int in PERIOD:
+		for x: int in PERIOD:
 			# x/y scaled by PERIOD (so 0.0 to 1.0)
-			fx = float(x) / PERIOD
-			fy = float(y) / PERIOD
-			
+			var fx := float(x) / PERIOD
+			var fy := float(y) / PERIOD
+
 			# Make noise symmetric
 			# Bilinear blend of four offset copies
-			noise_value = (
+			var noise_value := (
 				noise.get_noise_2d(x, y)                      * (1.0 - fx) * (1.0 - fy)
 				+ noise.get_noise_2d(x - PERIOD, y)           * fx         * (1.0 - fy)
 				+ noise.get_noise_2d(x, y - PERIOD)           * (1.0 - fx) * fy
 				+ noise.get_noise_2d(x - PERIOD, y - PERIOD)  * fx         * fy
 				)
-			
+
 			field[y * PERIOD + x] = noise_value
 	
 	# Determine exact cutoff values from percentages instead of scaling
@@ -114,8 +109,8 @@ func _bake_noise() -> void:
 	
 	# Classify into byte array (indicating terrain type)
 	for i: int in field.size():
-		terrain = _classify(field[i])
-		variant = randi_range(0, VARIANTS - 1)
+		var terrain := _classify(field[i])
+		var variant := randi_range(0, VARIANTS - 1)
 		_tiles[i] = terrain * VARIANTS + variant
 
 
@@ -145,18 +140,15 @@ func _player_chunk() -> Vector2i:
 
 ## Load chunks at position c
 func _load_chunk(c: Vector2i) -> void:
-	var world: Vector2i
-	var atlas_tile: Vector2i
-	
 	# Loop over x/y for CHUNK
-	for y: int in range(CHUNK):
-		for x: int in range(CHUNK):
+	for y: int in CHUNK:
+		for x: int in CHUNK:
 			# For each, get the world i coordinates
-			world = Vector2i(c.x * CHUNK + x, c.y * CHUNK + y)
-			
+			var world := Vector2i(c.x * CHUNK + x, c.y * CHUNK + y)
+
 			# Get the terrain for that coordinate using the tile_at method
-			atlas_tile = tile_at(world.x, world.y)
-			
+			var atlas_tile := tile_at(world.x, world.y)
+
 			# Use set_cell to set the image based on that value
 			set_cell(world, SOURCE_ID, atlas_tile)
 	
@@ -167,14 +159,12 @@ func _load_chunk(c: Vector2i) -> void:
 ## Unload chunks at position c
 func _unload_chunk(c: Vector2i) -> void:
 	# Like load_chunk but simpler
-	var world: Vector2i
-	
 	# Loop over x/y for CHUNK
-	for y: int in range(CHUNK):
-		for x: int in range(CHUNK):
+	for y: int in CHUNK:
+		for x: int in CHUNK:
 			# For each, get the world i coordinates
-			world = Vector2i(c.x * CHUNK + x, c.y * CHUNK + y)
-			
+			var world := Vector2i(c.x * CHUNK + x, c.y * CHUNK + y)
+
 			# Call erase_cell at that location
 			erase_cell(world)
 	
