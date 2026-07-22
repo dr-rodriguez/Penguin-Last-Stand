@@ -3,14 +3,14 @@ extends TileMapLayer
 # This script generates the map procedurally. 
 # We use PERIOD as the size of each tile and repeat it as the player moves through the world.
 
-# Noise thresholds as export values
+## Player character scene
+@export var _player: CharacterBody2D
 ## Water threshold
 @export var water_threshold: float = 0.2
 ## Dirt threshold
 @export var dirt_threshold: float = 0.4
 ## Grass threshold
 @export var grass_threshold: float = 0.85
-# rock_cutoff not used- anything higher than grass is rock
 
 ## Tiles per wrap
 const PERIOD: int = 128
@@ -26,9 +26,6 @@ const SOURCE_ID: int = 0
 ## Terrain possibilities
 enum Terrain {GRASS, DIRT, ROCK, WATER}
 # These are effectively ints, so Terrain.GRASS == 0
-
-## Player character scene
-@export var _player: CharacterBody2D
 
 ## Tile storage (noise values for the tile)
 var _tiles: PackedByteArray
@@ -47,11 +44,20 @@ var noise := FastNoiseLite.new()
 var water_cutoff: float
 var dirt_cutoff: float
 var grass_cutoff: float
-
+# rock_cutoff not used- anything higher than grass is rock
 
 func _ready() -> void:
 	# Generate tiles from noise
 	_bake_noise()
+	
+	# Find a suitable spawn location that avoids water
+	var cell := Vector2i.ZERO 
+	while cell == Vector2i.ZERO:
+		cell = _find_spawn()
+	_player.global_position = to_global(map_to_local(cell))
+	
+	# Load chunks around player, unload those far away
+	_refresh(_player_chunk())
 	
 	print("[MapArea] Generated map tiles")
 
@@ -130,7 +136,7 @@ func _refresh(center: Vector2i) -> void:
 				_load_chunk(c)
 
 
-## Helper method to determine which chunk the player is in
+## Determine which chunk the player is in
 func _player_chunk() -> Vector2i:
 	var cell := local_to_map(to_local(_player.global_position))
 	return Vector2i(
@@ -139,7 +145,7 @@ func _player_chunk() -> Vector2i:
 	)
 	
 
-## Helper method to load chunks at position c
+## Load chunks at position c
 func _load_chunk(c: Vector2i) -> void:
 	var world: Vector2i
 	var atlas_tile: Vector2i
@@ -160,7 +166,7 @@ func _load_chunk(c: Vector2i) -> void:
 	_loaded[c] = true
 
 
-## Helper method to unload chunks at position c
+## Unload chunks at position c
 func _unload_chunk(c: Vector2i) -> void:
 	# Like load_chunk but simpler
 	var world: Vector2i
@@ -190,7 +196,7 @@ func _classify(v: float) -> Terrain:
 		return Terrain.ROCK
 
 
-## Helper method to fetch atlas coordinates at specified location
+## Fetch atlas coordinates at specified location
 func tile_at(x: int, y: int) -> Vector2i:
 	# Unpacking notes:
 	# i = y * PERIOD + x          # cell -> index
@@ -204,8 +210,68 @@ func tile_at(x: int, y: int) -> Vector2i:
 	return Vector2i(packed % VARIANTS, packed / VARIANTS)
 
 
-## Helper method like tile_at but only carring about type of terrain
+## Method like tile_at but only carring about type of terrain
 func terrain_at(x: int, y: int) -> int:
 	# Get y-value of Atlas only (type of terrain)
 	@warning_ignore("integer_division")
 	return _tiles[posmod(y, PERIOD) * PERIOD + posmod(x, PERIOD)] / VARIANTS
+
+
+## Find player spawn location (avoid water spawn)
+func _find_spawn() -> Vector2i:
+	var candidate: Vector2i
+	## Minimum number of open spaces required
+	const MIN_OPEN: int = 400
+	
+	# Loop over 64 attempts to find a valid one
+	for attempt: int in 64:
+		candidate = Vector2i(randi() % PERIOD, randi() % PERIOD)
+		if terrain_at(candidate.x, candidate.y) == Terrain.WATER:
+			continue
+		if _open_region_size(candidate, MIN_OPEN) >= MIN_OPEN:
+			return candidate
+	return Vector2i.ZERO
+
+
+## BFS method to return number of valid tiles
+func _open_region_size(c: Vector2i, threshold: int) -> int:
+	# Initial check to ensure we don't start in water
+	if terrain_at(c.x, c.y) == Terrain.WATER:
+		return 0
+	
+	## Dictionary of visited locations
+	var visited: Dictionary = {}
+	visited[c] = true
+	## Queue of what to crawl through, starting with initial location
+	var queue: Array[Vector2i] = [c]
+	## Number of valid tiles found
+	var count: int = 0
+	
+	# Core of Breadth-First Search algorithm
+	var head: int = 0
+	while head < queue.size():
+		var cell: Vector2i = queue[head]
+		
+		count += 1
+		# Reached threshold counts, we have enough spaces for the player
+		if count >= threshold:
+			return count
+		
+		# Loop over direction vectors and test if water
+		for offset: Vector2i in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
+			# Wrap from 0..PERIOD-1
+			var n := Vector2i(posmod(cell.x + offset.x, PERIOD), posmod(cell.y + offset.y, PERIOD))
+			
+			# If already visited this position, skip
+			if visited.has(n):
+				continue
+			
+			# If a water tile, skip
+			if terrain_at(n.x, n.y) == Terrain.WATER:
+				continue
+			
+			# Mark position as visited and add to queue
+			visited[n] = true
+			queue.append(n)
+	
+	return count
