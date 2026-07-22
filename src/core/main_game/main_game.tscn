@@ -40,9 +40,6 @@ process_mode = 1
 [node name="MapArea" type="TileMapLayer" parent="World/LevelRoot" unique_id=1358161794 node_paths=PackedStringArray("_player")]
 tile_set = SubResource("TileSet_4ffcv")
 script = ExtResource("2_6n4xl")
-water_threshold = null
-dirt_threshold = null
-grass_threshold = null
 _player = NodePath("../../EntityRoot/Player")
 
 [node name="EntityRoot" type="Node2D" parent="World" unique_id=741512712]

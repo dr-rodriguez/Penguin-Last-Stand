@@ -18,7 +18,7 @@ const PERIOD: int = 128
 const CHUNK: int = 16
 ## Number of chunks around the player
 const LOAD_RADIUS: int = 2
-## Number of varient versions of each terrain
+## Number of variant versions of each terrain
 const VARIANTS: int = 3
 ## Source ID for TileSet
 const SOURCE_ID: int = 0
@@ -37,9 +37,6 @@ var _tiles: PackedByteArray
 ## Dictionary of loaded chunks (keys are Vector2i coords, values are true/false)
 var _loaded: Dictionary = {}
 
-## Noise generator
-var noise := FastNoiseLite.new()
-
 # Noise cutoff values for terrain
 var water_cutoff: float
 var dirt_cutoff: float
@@ -51,7 +48,7 @@ func _ready() -> void:
 	_bake_noise()
 	
 	# Find a suitable spawn location that avoids water
-	var cell := Vector2i.ZERO 
+	var cell: Vector2i = _find_spawn()
 	while cell == Vector2i.ZERO:
 		cell = _find_spawn()
 	_player.global_position = to_global(map_to_local(cell))
@@ -79,6 +76,8 @@ func _bake_noise() -> void:
 	field.resize(PERIOD * PERIOD)
 	
 	# Set noise parameters
+	## Noise generator
+	var noise := FastNoiseLite.new()
 	noise.set_noise_type(FastNoiseLite.TYPE_SIMPLEX_SMOOTH)
 	noise.set_seed(randi())
 	noise.set_frequency(0.02) # lower is smoother
@@ -88,14 +87,14 @@ func _bake_noise() -> void:
 	_tiles.resize(PERIOD * PERIOD)
 	
 	# Generate over all x/y values within the PERIOD
-	for x in range(PERIOD):
-		for y in range(PERIOD):
+	for y: int in range(PERIOD):
+		for x: int in range(PERIOD):
 			# x/y scaled by PERIOD (so 0.0 to 1.0)
 			fx = float(x) / PERIOD
 			fy = float(y) / PERIOD
 			
 			# Make noise symmetric
-			# Biliniar blend of four offset copies
+			# Bilinear blend of four offset copies
 			noise_value = (
 				noise.get_noise_2d(x, y)                      * (1.0 - fx) * (1.0 - fy)
 				+ noise.get_noise_2d(x - PERIOD, y)           * fx         * (1.0 - fy)
@@ -103,10 +102,9 @@ func _bake_noise() -> void:
 				+ noise.get_noise_2d(x - PERIOD, y - PERIOD)  * fx         * fy
 				)
 			
-			# Scale noise to 0.0 to 1.0 (instead of -1 to 1)
-			field[x * PERIOD + y] = noise_value
+			field[y * PERIOD + x] = noise_value
 	
-	# Determine exact cutoff values from percentages
+	# Determine exact cutoff values from percentages instead of scaling
 	var sorted := field.duplicate()
 	sorted.sort()
 	var n := sorted.size()
@@ -115,7 +113,7 @@ func _bake_noise() -> void:
 	grass_cutoff = sorted[int(n * grass_threshold)]
 	
 	# Classify into byte array (indicating terrain type)
-	for i in field.size():
+	for i: int in field.size():
 		terrain = _classify(field[i])
 		variant = randi_range(0, VARIANTS - 1)
 		_tiles[i] = terrain * VARIANTS + variant
@@ -123,7 +121,7 @@ func _bake_noise() -> void:
 
 ## Load/unload chunks as needed based on player position
 func _refresh(center: Vector2i) -> void:
-	# Check for loaded chanks that are too far away- unload them
+	# Check for loaded chunks that are too far away- unload them
 	for c: Vector2i in _loaded.keys():
 		if absi(c.x - center.x) > LOAD_RADIUS or absi(c.y - center.y) > LOAD_RADIUS:
 			_unload_chunk(c)
@@ -151,8 +149,8 @@ func _load_chunk(c: Vector2i) -> void:
 	var atlas_tile: Vector2i
 	
 	# Loop over x/y for CHUNK
-	for x in range(CHUNK):
-		for y in range(CHUNK):
+	for y: int in range(CHUNK):
+		for x: int in range(CHUNK):
 			# For each, get the world i coordinates
 			world = Vector2i(c.x * CHUNK + x, c.y * CHUNK + y)
 			
@@ -172,8 +170,8 @@ func _unload_chunk(c: Vector2i) -> void:
 	var world: Vector2i
 	
 	# Loop over x/y for CHUNK
-	for x in range(CHUNK):
-		for y in range(CHUNK):
+	for y: int in range(CHUNK):
+		for x: int in range(CHUNK):
 			# For each, get the world i coordinates
 			world = Vector2i(c.x * CHUNK + x, c.y * CHUNK + y)
 			
@@ -210,7 +208,7 @@ func tile_at(x: int, y: int) -> Vector2i:
 	return Vector2i(packed % VARIANTS, packed / VARIANTS)
 
 
-## Method like tile_at but only carring about type of terrain
+## Method like tile_at but only caring about type of terrain
 func terrain_at(x: int, y: int) -> int:
 	# Get y-value of Atlas only (type of terrain)
 	@warning_ignore("integer_division")
@@ -251,6 +249,7 @@ func _open_region_size(c: Vector2i, threshold: int) -> int:
 	var head: int = 0
 	while head < queue.size():
 		var cell: Vector2i = queue[head]
+		head += 1
 		
 		count += 1
 		# Reached threshold counts, we have enough spaces for the player
