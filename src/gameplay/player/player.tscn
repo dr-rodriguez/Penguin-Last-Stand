@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dvhevmaxjus1t"]
 
 [ext_resource type="Script" uid="uid://bjohnfol4a8hs" path="res://src/gameplay/player/player.gd" id="1_64h4j"]
-[ext_resource type="Texture2D" uid="uid://bw6hdiefjnm1l" path="res://assets/art/ui/icons/icon.svg" id="2_k2146"]
+[ext_resource type="Texture2D" uid="uid://dok20bkn0htqj" path="res://assets/art/characters/player/penguin1.png" id="2_64h4j"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4ffcv"]
 
@@ -13,5 +13,4 @@ script = ExtResource("1_64h4j")
 shape = SubResource("CircleShape2D_4ffcv")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=228163396]
-scale = Vector2(0.16, 0.16)
-texture = ExtResource("2_k2146")
+texture = ExtResource("2_64h4j")
