@@ -3,14 +3,16 @@
 [ext_resource type="Script" uid="uid://bjohnfol4a8hs" path="res://src/gameplay/player/player.gd" id="1_64h4j"]
 [ext_resource type="Texture2D" uid="uid://dok20bkn0htqj" path="res://assets/art/characters/player/penguin1.png" id="2_64h4j"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_4ffcv"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_howls"]
+radius = 7.0
+height = 18.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1597879631]
 collision_mask = 26
 script = ExtResource("1_64h4j")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=967060885]
-shape = SubResource("CircleShape2D_4ffcv")
+shape = SubResource("CapsuleShape2D_howls")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=228163396]
 texture = ExtResource("2_64h4j")
