@@ -1,8 +1,10 @@
 extends CharacterBody2D
 
-# Movement attributes
-var direction: Vector2 = Vector2.ZERO
+
 const PLAYER_SPEED: float = 100.0
+
+var direction: Vector2 = Vector2.ZERO
+
 @onready var sprite: Sprite2D = $Sprite2D
 
 
@@ -19,7 +21,4 @@ func _anim_update() -> void:
 		return
 	
 	# Flip to direction of motion
-	if direction.x < 0:
-		sprite.flip_h = true
-	else:
-		sprite.flip_h = false
+	sprite.flip_h = direction.x < 0

@@ -2,9 +2,9 @@
 
 [ext_resource type="Texture2D" uid="uid://ydhc2pyfnbeb" path="res://assets/art/world/tilesets/ground_tiles.png" id="1_3fed5"]
 [ext_resource type="Script" uid="uid://bo8ckc7crryf4" path="res://src/core/main_game/main_game.gd" id="1_n4iq1"]
-[ext_resource type="Script" uid="uid://bspvswct7wgpm" path="res://src/core/main_game/map_area.gd" id="2_6n4xl"]
+[ext_resource type="Script" uid="uid://bspvswct7wgpm" path="res://src/levels/map_area.gd" id="2_6n4xl"]
 [ext_resource type="PackedScene" uid="uid://dvhevmaxjus1t" path="res://src/gameplay/player/player.tscn" id="2_6yl8a"]
-[ext_resource type="Script" uid="uid://eigiawxlejx6" path="res://src/core/main_game/pool.gd" id="2_l0hoa"]
+[ext_resource type="Script" uid="uid://eigiawxlejx6" path="res://src/core/pool.gd" id="2_l0hoa"]
 [ext_resource type="PackedScene" uid="uid://t6ry3xpg8q7o" path="res://src/gameplay/interactables/snowball.tscn" id="3_0kore"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6yl8a"]
@@ -62,7 +62,7 @@ unique_name_in_owner = true
 script = ExtResource("2_l0hoa")
 scene = ExtResource("3_0kore")
 
-[node name="ShootTimer" type="Timer" parent="World/EntityRoot/SnowballPool" unique_id=1910023679]
+[node name="ShootTimer" type="Timer" parent="World/EntityRoot" unique_id=1910023679]
 unique_name_in_owner = true
 wait_time = 0.5
 one_shot = true
@@ -110,4 +110,4 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[connection signal="timeout" from="World/EntityRoot/SnowballPool/ShootTimer" to="." method="_on_shoot_timer_timeout"]
+[connection signal="timeout" from="World/EntityRoot/ShootTimer" to="." method="_on_shoot_timer_timeout"]

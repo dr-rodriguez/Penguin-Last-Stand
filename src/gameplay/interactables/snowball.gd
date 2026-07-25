@@ -1,19 +1,10 @@
 extends Area2D
 
+const RANGE: float = 300.
+
 var direction := Vector2.ZERO
 var travelled_distance: float = 0.0
 var speed: float = Game.current_bullet_speed
-const RANGE: float = 300.
-
-
-## Reset and specify movement direction and speed
-func launch() -> void:
-	# Reset properties
-	_reset()
-	
-	var mouse_pos: Vector2 = get_global_mouse_position()
-	direction = (mouse_pos - global_position).normalized()
-	speed = Game.current_bullet_speed
 
 
 ## Reset any properties between acquisitions
@@ -33,3 +24,13 @@ func _physics_process(delta: float) -> void:
 	# May also need to add logic for when it hits an enemy
 	if travelled_distance > RANGE:
 		Game.snowball_done.emit(self)
+
+
+## Reset and specify movement direction and speed
+func launch() -> void:
+	# Reset properties
+	_reset()
+	
+	var mouse_pos: Vector2 = get_global_mouse_position()
+	direction = (mouse_pos - global_position).normalized()
+	speed = Game.current_bullet_speed

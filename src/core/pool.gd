@@ -16,12 +16,6 @@ func _ready() -> void:
 	for i in initial_size:
 		_add_new()
 
-## Instantiate a new scene, but deactivated
-func _add_new() -> Node:
-	var n := scene.instantiate()
-	add_child(n)
-	_deactivate(n)
-	return n
 
 ## Hand out a ready node (or null if empty and not growing)
 func acquire() -> Node:
@@ -41,9 +35,19 @@ func acquire() -> Node:
 		n.set_deferred("monitoring", true)   # re-enable overlap checks
 	return n
 
+
 ## Take a node back into the pool (call this instead of queue_free)
 func release(n: Node) -> void:
 	_deactivate(n)
+
+
+## Instantiate a new scene, but deactivated
+func _add_new() -> Node:
+	var n := scene.instantiate()
+	add_child(n)
+	_deactivate(n)
+	return n
+
 
 ## Core logic of storing back in pool
 func _deactivate(n: Node) -> void:
