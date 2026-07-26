@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemyDef" format=3 uid="uid://db8h4fdvqqluk"]
+
+[ext_resource type="Script" uid="uid://cihybvhpvn5ve" path="res://src/resources/enemy_def.gd" id="1_082pe"]
+[ext_resource type="Texture2D" uid="uid://6b30riebu7r8" path="res://assets/art/characters/enemies/axolotol1.png" id="2_082pe"]
+
+[resource]
+script = ExtResource("1_082pe")
+texture = ExtResource("2_082pe")
+name = "Axolotl"
+metadata/_custom_type_script = "uid://cihybvhpvn5ve"

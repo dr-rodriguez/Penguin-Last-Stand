@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemyDef" format=3 uid="uid://bhfr64temxj8x"]
+
+[ext_resource type="Script" uid="uid://cihybvhpvn5ve" path="res://src/resources/enemy_def.gd" id="1_wyw24"]
+[ext_resource type="Texture2D" uid="uid://bhihdjwxmbvrt" path="res://assets/art/characters/enemies/beaver1.png" id="2_wyw24"]
+
+[resource]
+script = ExtResource("1_wyw24")
+texture = ExtResource("2_wyw24")
+name = "Beaver"
+metadata/_custom_type_script = "uid://cihybvhpvn5ve"
