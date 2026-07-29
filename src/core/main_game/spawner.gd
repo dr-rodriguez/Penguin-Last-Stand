@@ -12,6 +12,12 @@ extends Path2D
 const BEAVER := preload("res://src/resources/beaver.tres")
 const AXOLOTL := preload("res://src/resources/axolotl.tres")
 
+
+func _ready() -> void:
+	# Connect signals
+	Game.enemy_defeated.connect(_on_enemy_defeated)
+
+
 func _on_spawn_timer_timeout() -> void:
 	# Get a random location along the path
 	spawn_follow.progress_ratio = randf()
@@ -32,4 +38,19 @@ func _on_spawn_timer_timeout() -> void:
 	# Start enemy movement, pass player as target
 	enemy.launch(player)
 	
-	print("[Spawner] Enemy " + enemy.enemy_def.name + " added")
+	#print("[Spawner] Enemy " + enemy.enemy_def.name + " added")
+
+
+## Release a defeated enemy
+func _on_enemy_defeated(enemy: Node) -> void:
+	#print("[Sapwner] Enemy " + str(enemy) + " released")
+	
+	# Count score
+	if enemy.enemy_def.name == "Axolotl":
+		Game.axolotl_kills += 1
+	elif enemy.enemy_def.name == "Beaver":
+		Game.beaver_kills += 1
+	Game.player_xp += 1
+	
+	# Release enemy back to pool
+	enemy_pool.release(enemy)

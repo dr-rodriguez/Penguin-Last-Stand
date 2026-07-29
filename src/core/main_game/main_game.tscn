@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://t6ry3xpg8q7o" path="res://src/gameplay/interactables/snowball.tscn" id="3_0kore"]
 [ext_resource type="Script" uid="uid://b2owcr3iefk4m" path="res://src/core/main_game/spawner.gd" id="5_l0hoa"]
 [ext_resource type="PackedScene" uid="uid://cepak02dmsxde" path="res://src/gameplay/enemies/Enemy.tscn" id="7_0kore"]
+[ext_resource type="PackedScene" uid="uid://bt6h3kgxir3xo" path="res://src/ui/debug/debug_ui.tscn" id="9_tc86p"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6yl8a"]
 texture = ExtResource("1_3fed5")
@@ -133,9 +134,14 @@ visible = false
 
 [node name="DebugRoot" type="Control" parent="DebugLayer" unique_id=1254802738]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DebugUi" parent="DebugLayer/DebugRoot" unique_id=1164080196 instance=ExtResource("9_tc86p")]
+layout_mode = 1
 
 [connection signal="timeout" from="World/EntityRoot/Player/Spawner/SpawnTimer" to="World/EntityRoot/Player/Spawner" method="_on_spawn_timer_timeout"]
 [connection signal="timeout" from="World/EntityRoot/ShootTimer" to="." method="_on_shoot_timer_timeout"]

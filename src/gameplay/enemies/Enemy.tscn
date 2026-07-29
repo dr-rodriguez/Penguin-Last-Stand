@@ -8,6 +8,7 @@ radius = 8.0
 
 [node name="Enemy" type="CharacterBody2D" unique_id=1737991205 groups=["Enemy"]]
 collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_pjw7q")
 enemy_def = ExtResource("2_35jqv")
 

@@ -1,19 +1,20 @@
 [gd_scene format=3 uid="uid://t6ry3xpg8q7o"]
 
 [ext_resource type="Script" uid="uid://bm2um6u1qe7r0" path="res://src/gameplay/interactables/snowball.gd" id="1_howls"]
-[ext_resource type="Texture2D" uid="uid://bw6hdiefjnm1l" path="res://assets/art/ui/icons/icon.svg" id="1_p3vm8"]
+[ext_resource type="Texture2D" uid="uid://chllrqkdyfh3i" path="res://assets/art/characters/player/snowball1.png" id="2_howls"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4ffcv"]
-radius = 6.0
+radius = 4.0
 
-[node name="Snowball" type="Area2D" unique_id=1044621009]
+[node name="Snowball" type="Area2D" unique_id=1044621009 groups=["Bullet"]]
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_howls")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1017998608]
-scale = Vector2(0.08, 0.08)
-texture = ExtResource("1_p3vm8")
+texture = ExtResource("2_howls")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1641101909]
 shape = SubResource("CircleShape2D_4ffcv")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

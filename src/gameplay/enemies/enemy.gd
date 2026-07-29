@@ -55,3 +55,17 @@ func launch(new_target: Node2D) -> void:
 	_reset()
 	target = new_target
 	active = true
+
+
+## Take damage
+func take_damage(value: float) -> void:
+	health -= value
+	# Remove enemy if health goes negative
+	if health <= 0:
+		remove_enemy()
+
+
+## Remove enemy node
+func remove_enemy() -> void:
+	# Emit signal so we can call release
+	Game.enemy_defeated.emit(self)

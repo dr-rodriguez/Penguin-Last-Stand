@@ -34,3 +34,15 @@ func launch() -> void:
 	var mouse_pos: Vector2 = get_global_mouse_position()
 	direction = (mouse_pos - global_position).normalized()
 	speed = Game.current_bullet_speed
+
+
+## Hit an enemy
+func _on_body_entered(body: Node2D) -> void:
+	# Check if body hit is an enemy
+	if "Enemy" in body.get_groups():
+		#print("[Snowball] hit enemy " + str(body))
+		# Do damage to enemy
+		body.take_damage(Game.current_bullet_damage)
+		Game.snowball_done.emit(self)
+	else:
+		return

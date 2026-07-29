@@ -4,12 +4,15 @@ extends Node
 @onready var player: CharacterBody2D = %Player
 @onready var shoot_point: Marker2D = %ShootPoint
 @onready var shoot_timer: Timer = %ShootTimer
+@onready var debug_layer := $DebugLayer
 
 var on_cooldown: bool = false
 
 func _ready() -> void:
 	# Connect signals
 	Game.snowball_done.connect(_on_snowball_done)
+	
+	debug_layer.visible = Game.debug_flag
 
 
 func _process(_delta: float) -> void:
