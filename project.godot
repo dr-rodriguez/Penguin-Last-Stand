@@ -14,7 +14,7 @@ config/name="Penguin Last Stand"
 config/tags=PackedStringArray("game")
 run/main_scene="res://src/core/main_game/main_game.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
-config/icon="res://assets/art/ui/icons/icon.svg"
+config/icon="uid://dok20bkn0htqj"
 
 [autoload]
 

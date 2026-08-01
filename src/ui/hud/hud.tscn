@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://vdxen4r0qq0f"]
+
+[ext_resource type="Theme" uid="uid://c3i1e2wloyui2" path="res://src/ui/ui_theme.tres" id="1_cvkdw"]
+[ext_resource type="Script" uid="uid://jp1n53ymxprb" path="res://src/ui/hud/hud.gd" id="1_jobw0"]
+
+[node name="Hud" type="Control" unique_id=1307281789]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_cvkdw")
+script = ExtResource("1_jobw0")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=964831041]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=734673206]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=465374927]
+layout_mode = 2
+
+[node name="HealthBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=776789977]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 2
+value = 50.0
+show_percentage = false

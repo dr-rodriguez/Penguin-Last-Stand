@@ -4,6 +4,7 @@ extends CharacterBody2D
 @export var enemy_def: EnemyDef
 
 @onready var sprite: Sprite2D = $Sprite2D
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 var direction := Vector2.ZERO
 var health: float
@@ -18,6 +19,9 @@ var active: bool = false
 
 ## Reset any properties between acquisitions
 func _reset() -> void:
+	# Re-enable collision after being released back to the pool
+	collision_shape.set_deferred("disabled", false)
+
 	# Safeguard against not having enemy_def set
 	if enemy_def == null:
 		return
@@ -28,6 +32,7 @@ func _reset() -> void:
 	
 	# Set correct sprite texture
 	sprite.texture = enemy_def.texture
+	sprite.modulate = Color.WHITE
 
 
 func _ready() -> void:
@@ -60,12 +65,28 @@ func launch(new_target: Node2D) -> void:
 ## Take damage
 func take_damage(value: float) -> void:
 	health -= value
+	
+	damage_fx()
+	
 	# Remove enemy if health goes negative
 	if health <= 0:
 		remove_enemy()
 
 
+## Damage FX indicator
+func damage_fx() -> void:
+	var hit_time: float = 0.2
+	var tween = get_tree().create_tween()
+	# Flash red when hit
+	tween.tween_property(sprite, "modulate", Color.RED, hit_time)
+	tween.tween_property(sprite, "modulate", Color.WHITE, hit_time)
+
+
 ## Remove enemy node
 func remove_enemy() -> void:
+	# Stop being hittable/touchable while idle in the pool
+	active = false
+	collision_shape.set_deferred("disabled", true)
+
 	# Emit signal so we can call release
 	Game.enemy_defeated.emit(self)

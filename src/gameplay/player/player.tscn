@@ -7,6 +7,10 @@
 radius = 7.0
 height = 18.0
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4ffcv"]
+radius = 7.0312514
+height = 18.965502
+
 [node name="Player" type="CharacterBody2D" unique_id=1597879631 groups=["Player"]]
 collision_mask = 16
 script = ExtResource("1_64h4j")
@@ -16,3 +20,15 @@ shape = SubResource("CapsuleShape2D_howls")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=228163396]
 texture = ExtResource("2_64h4j")
+
+[node name="HurtBox" type="Area2D" parent="." unique_id=55037141]
+scale = Vector2(1.2799997, 1.1600009)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=1219543977]
+shape = SubResource("CapsuleShape2D_4ffcv")
+
+[node name="DamageCooldown" type="Timer" parent="." unique_id=1086614640]
+wait_time = 0.5
+one_shot = true
