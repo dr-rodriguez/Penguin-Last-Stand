@@ -3,7 +3,7 @@ extends Path2D
 @onready var spawn_follow: PathFollow2D = $SpawnFollow
 @onready var spawn_timer: Timer = $SpawnTimer
 
-@onready var enemy_pool: Pool = $EnemyPool
+@onready var enemy_pool: Pool = %EnemyPool
 
 ## Pointer to player node
 @onready var player: CharacterBody2D = get_tree().get_first_node_in_group("Player")

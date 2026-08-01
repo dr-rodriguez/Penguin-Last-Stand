@@ -58,6 +58,10 @@ func _deactivate(n: Node) -> void:
 	if n is CollisionObject2D:
 		n.set_deferred("monitoring", false)  # stop overlap checks while idle
 	
+	# Move to temp far location to avoid any funny collisions
+	if n is Node2D:
+		n.global_position = Vector2(0, -10000)
+	
 	# Store back in pool for reuse
 	if n not in _free:
 		_free.append(n)

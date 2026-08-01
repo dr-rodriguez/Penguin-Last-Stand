@@ -59,26 +59,21 @@ _player = NodePath("../../EntityRoot/Player")
 
 [node name="EntityRoot" type="Node2D" parent="World" unique_id=741512712]
 
+[node name="EnemyPool" type="Node" parent="World/EntityRoot" unique_id=2062763288]
+unique_name_in_owner = true
+script = ExtResource("2_l0hoa")
+scene = ExtResource("7_0kore")
+can_grow = false
+
 [node name="Player" parent="World/EntityRoot" unique_id=1597879631 instance=ExtResource("2_6yl8a")]
 unique_name_in_owner = true
 position = Vector2(262, 153)
 
-[node name="Camera2D" type="Camera2D" parent="World/EntityRoot/Player" unique_id=2057989762]
-zoom = Vector2(2, 2)
-
-[node name="ShootPoint" type="Marker2D" parent="World/EntityRoot/Player" unique_id=30899323]
-unique_name_in_owner = true
-
 [node name="Spawner" type="Path2D" parent="World/EntityRoot/Player" unique_id=2069571862]
-position = Vector2(-7.924759, -9.446327)
+position = Vector2(-7.924759, -9.44632)
 scale = Vector2(1.0501567, 1.1073446)
 curve = SubResource("Curve2D_4ffcv")
 script = ExtResource("5_l0hoa")
-
-[node name="EnemyPool" type="Node" parent="World/EntityRoot/Player/Spawner" unique_id=2062763288]
-script = ExtResource("2_l0hoa")
-scene = ExtResource("7_0kore")
-can_grow = false
 
 [node name="SpawnFollow" type="PathFollow2D" parent="World/EntityRoot/Player/Spawner" unique_id=1510105722]
 position = Vector2(8.498502, 103.35203)
@@ -86,6 +81,12 @@ rotation = -0.0111566605
 
 [node name="SpawnTimer" type="Timer" parent="World/EntityRoot/Player/Spawner" unique_id=2055835520]
 autostart = true
+
+[node name="Camera2D" type="Camera2D" parent="World/EntityRoot/Player" unique_id=2057989762]
+zoom = Vector2(2, 2)
+
+[node name="ShootPoint" type="Marker2D" parent="World/EntityRoot/Player" unique_id=30899323]
+unique_name_in_owner = true
 
 [node name="SnowballPool" type="Node" parent="World/EntityRoot" unique_id=1582250324]
 unique_name_in_owner = true
