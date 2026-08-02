@@ -47,6 +47,11 @@ script = ExtResource("1_n4iq1")
 [node name="Systems" type="Node" parent="." unique_id=1217314786]
 process_mode = 1
 
+[node name="GameTimer" type="Timer" parent="Systems" unique_id=1595475123]
+unique_name_in_owner = true
+autostart = true
+ignore_time_scale = true
+
 [node name="World" type="Node2D" parent="." unique_id=986561419]
 process_mode = 1
 
@@ -151,5 +156,6 @@ grow_vertical = 2
 [node name="DebugUi" parent="DebugLayer/DebugRoot" unique_id=1164080196 instance=ExtResource("9_tc86p")]
 layout_mode = 1
 
+[connection signal="timeout" from="Systems/GameTimer" to="." method="_on_game_timer_timeout"]
 [connection signal="timeout" from="World/EntityRoot/Player/Spawner/SpawnTimer" to="World/EntityRoot/Player/Spawner" method="_on_spawn_timer_timeout"]
 [connection signal="timeout" from="World/EntityRoot/ShootTimer" to="." method="_on_shoot_timer_timeout"]

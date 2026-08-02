@@ -1,7 +1,10 @@
 [gd_resource type="Theme" format=3 uid="uid://c3i1e2wloyui2"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4ffcv"]
+bg_color = Color(0.1764706, 0.1764706, 0.1764706, 0.6431373)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wksio"]
-bg_color = Color(0.17641908, 0.17641911, 0.17641899, 1)
+bg_color = Color(0.1764706, 0.1764706, 0.1764706, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -20,10 +23,13 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [resource]
+Label/constants/outline_size = 2
+Label/font_sizes/font_size = 14
 MarginContainer/constants/margin_bottom = 5
 MarginContainer/constants/margin_left = 5
 MarginContainer/constants/margin_right = 5
 MarginContainer/constants/margin_top = 5
+Panel/styles/panel = SubResource("StyleBoxFlat_4ffcv")
 ProgressBar/colors/font_color = Color(0, 0, 0, 1)
 ProgressBar/colors/font_outline_color = Color(0, 0, 0, 1)
 ProgressBar/constants/outline_size = 0

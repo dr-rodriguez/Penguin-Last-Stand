@@ -6,6 +6,7 @@ extends Node
 signal snowball_done(n: Node)
 signal enemy_defeated(n: Node)
 signal player_hit()
+signal game_tick()
 
 # Player properties
 var player_xp: int = 0
@@ -22,13 +23,44 @@ var current_bullet_damage: float = 4.0
 
 ## Enemy type weight (below this value, second type shows up)
 var enemy_type_weight: float = 0.4
+## Enemy spawn time (rate increases over time)
+var enemy_spawn_time: float = 1.0
 
 # Game stats
 var beaver_kills: int = 0
 var axolotl_kills: int = 0
+## Game time in seconds
+var time_elapsed: int = 0
+## Maximum time to count down from
+var max_time: int = 900
 
 var debug_flag:bool = true
 
 func _ready() -> void:
+	_reset()
 	print("[Game] ready")
+	game_tick.connect(calculate_time_stats)
+
+
+## Helper method to reset values on game start
+func _reset() -> void:
 	# TODO: Make a game reset function
+	pass
+
+
+## Logic for any time calculations
+func calculate_time_stats() -> void:
+	time_elapsed += 1
+	
+	# Increase difficulty every 2 minutes
+	if time_elapsed % 120 == 0:
+		enemy_spawn_time *= 0.9
+		# Clamp so we don't go above/below thresholds
+		enemy_spawn_time = clampf(enemy_spawn_time, 0.2, 1.0)
+		print("[Game] Spawn time now " + str(enemy_spawn_time))
+
+
+## Formats a time in seconds as MM:SS (e.g. 900 -> "15:00")
+func format_time(seconds: int) -> String:
+	@warning_ignore("INTEGER_DIVISION") 
+	return "%02d:%02d" % [seconds / 60, seconds % 60]

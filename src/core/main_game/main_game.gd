@@ -5,6 +5,7 @@ extends Node
 @onready var shoot_point: Marker2D = %ShootPoint
 @onready var shoot_timer: Timer = %ShootTimer
 @onready var debug_layer := $DebugLayer
+@onready var game_timer: Timer = %GameTimer
 
 var on_cooldown: bool = false
 
@@ -47,3 +48,8 @@ func _on_snowball_done(snowball: Node) -> void:
 
 func _on_shoot_timer_timeout() -> void:
 	on_cooldown = false
+
+
+## Every second, emit a game tick
+func _on_game_timer_timeout() -> void:
+	Game.game_tick.emit()

@@ -38,6 +38,9 @@ func _on_spawn_timer_timeout() -> void:
 	# Start enemy movement, pass player as target
 	enemy.launch(player)
 	
+	# Use latest spawn time
+	spawn_timer.start(Game.enemy_spawn_time)
+	
 	#print("[Spawner] Enemy " + enemy.enemy_def.name + " added")
 
 

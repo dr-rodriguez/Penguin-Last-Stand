@@ -13,23 +13,29 @@ grow_vertical = 2
 theme = ExtResource("1_cvkdw")
 script = ExtResource("1_jobw0")
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=964831041]
+[node name="Panel" type="Panel" parent="." unique_id=653456063]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
 grow_horizontal = 2
-grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=734673206]
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=964831041]
+layout_mode = 0
+offset_right = 124.0
+offset_bottom = 33.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer" unique_id=465374927]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=465374927]
-layout_mode = 2
-
-[node name="HealthBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=776789977]
+[node name="HealthBar" type="ProgressBar" parent="Panel/MarginContainer/HBoxContainer" unique_id=776789977]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 20)
 layout_mode = 2
 value = 50.0
 show_percentage = false
+
+[node name="TimeLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer" unique_id=629227596]
+unique_name_in_owner = true
+layout_mode = 2
+text = "15:00"
