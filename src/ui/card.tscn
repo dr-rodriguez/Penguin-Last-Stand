@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://c4vb3joi3rcuu"]
+
+[ext_resource type="Theme" uid="uid://c3i1e2wloyui2" path="res://src/ui/ui_theme.tres" id="1_23fyk"]
+[ext_resource type="Texture2D" uid="uid://dok20bkn0htqj" path="res://assets/art/characters/player/penguin1.png" id="2_peddy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yi3o8"]
+bg_color = Color(0.10502044, 0.18517438, 0.25179803, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.56780016, 0.8907156, 0.61080694, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[node name="Card" type="Control" unique_id=1428885490]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_23fyk")
+
+[node name="Panel" type="Panel" parent="." unique_id=578823931]
+custom_minimum_size = Vector2(150, 200)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_yi3o8")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1511541764]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=1068507748]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer" unique_id=521853016]
+layout_mode = 2
+text = "Title"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=699725555]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Image" type="TextureRect" parent="Panel/MarginContainer/VBoxContainer/MarginContainer" unique_id=1488857116]
+custom_minimum_size = Vector2(60, 60)
+custom_maximum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("2_peddy")
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=663061330]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="DescriptionLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/MarginContainer2" unique_id=1751820608]
+layout_mode = 2
+text = "Description of 
+effect"
+horizontal_alignment = 1
