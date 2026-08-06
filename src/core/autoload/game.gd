@@ -7,6 +7,13 @@ signal snowball_done(n: Node)
 signal enemy_defeated(n: Node)
 signal player_hit()
 signal game_tick()
+signal run_won()
+signal run_lost()
+
+## Growth rate of difficulty/level up requirement
+const GROWTH: float = 0.1
+## Maximum time to count down from
+const MAX_TIME: int = 900
 
 # Player properties
 var player_xp: int = 0
@@ -31,10 +38,9 @@ var beaver_kills: int = 0
 var axolotl_kills: int = 0
 ## Game time in seconds
 var time_elapsed: int = 0
-## Maximum time to count down from
-var max_time: int = 900
 
 var debug_flag:bool = true
+
 
 func _ready() -> void:
 	_reset()
@@ -52,9 +58,13 @@ func _reset() -> void:
 func calculate_time_stats() -> void:
 	time_elapsed += 1
 	
+	# Reached end time, emit win signal
+	if time_elapsed >= MAX_TIME:
+		run_won.emit()
+	
 	# Increase difficulty every 2 minutes
 	if time_elapsed % 120 == 0:
-		enemy_spawn_time *= 0.9
+		enemy_spawn_time = enemy_spawn_time * (1.0 - GROWTH)
 		# Clamp so we don't go above/below thresholds
 		enemy_spawn_time = clampf(enemy_spawn_time, 0.2, 1.0)
 		print("[Game] Spawn time now " + str(enemy_spawn_time))

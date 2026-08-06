@@ -39,7 +39,7 @@ func _check_enemy_contact() -> void:
 			continue
 		
 		take_damage(body.damage)
-		print("[Player] hit by %s @ %s hp=%s" % [body.get_instance_id(), body.global_position, body.health])
+		#print("[Player] hit by %s @ %s hp=%s" % [body.get_instance_id(), body.global_position, body.health])
 		
 		# Reciprocal damage to enemy
 		# TODO: Decide if this should be bullet damage or some other value
@@ -55,7 +55,12 @@ func take_damage(value: float) -> void:
 	Game.current_player_health -= value
 	damage_fx()
 	Game.player_hit.emit()
+	
 	# TODO: Add logic for when below 0 health
+	
+	# Emit signal when player lost
+	if Game.current_player_health <= 0:
+		Game.run_lost.emit()
 
 
 ## Damage FX indicator
