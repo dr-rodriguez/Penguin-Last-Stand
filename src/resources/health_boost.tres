@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="PowerUp" format=3 uid="uid://t1vjn54ovjyr"]
+
+[ext_resource type="Script" uid="uid://bulq1r4uyoc1p" path="res://src/resources/powerup.gd" id="1_ik40g"]
+[ext_resource type="Texture2D" uid="uid://dok20bkn0htqj" path="res://assets/art/characters/player/penguin1.png" id="2_d63nj"]
+
+[resource]
+script = ExtResource("1_ik40g")
+name = "HealthBoost"
+texture = ExtResource("2_d63nj")
+title = "Max Health Up"
+description = "Increase maximum health."
+metadata/_custom_type_script = "uid://bulq1r4uyoc1p"

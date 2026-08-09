@@ -53,7 +53,7 @@ func _on_enemy_defeated(enemy: Node) -> void:
 		Game.axolotl_kills += 1
 	elif enemy.enemy_def.name == "Beaver":
 		Game.beaver_kills += 1
-	Game.player_xp += 1
+	# Player XP is handled by Game autoload
 	
 	# Release enemy back to pool
 	enemy_pool.release(enemy)

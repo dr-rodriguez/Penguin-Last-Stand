@@ -22,6 +22,10 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_4ffcv"]
+color = Color(0.30387083, 0.46045238, 0.59457064, 1)
+vertical = true
+
 [resource]
 Label/constants/outline_size = 2
 Label/font_sizes/font_size = 14
@@ -37,3 +41,5 @@ ProgressBar/font_sizes/font_size = 16
 ProgressBar/fonts/font = null
 ProgressBar/styles/background = SubResource("StyleBoxFlat_wksio")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_cjtra")
+VSeparator/constants/separation = 6
+VSeparator/styles/separator = SubResource("StyleBoxLine_4ffcv")

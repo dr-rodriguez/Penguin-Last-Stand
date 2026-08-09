@@ -9,6 +9,7 @@ signal player_hit()
 signal game_tick()
 signal run_won()
 signal run_lost()
+signal level_up()
 
 ## Growth rate of difficulty/level up requirement
 const GROWTH: float = 0.1
@@ -16,9 +17,11 @@ const GROWTH: float = 0.1
 const MAX_TIME: int = 900
 
 # Player properties
-var player_xp: int = 0
+var player_xp: float = 0
 var player_health: float = 50.
+var player_level: int = 1
 var current_player_health: float = 50.
+var level_xp_needed: float = 10
 
 # Player combat attributes
 var bullet_speed: float = 300.
@@ -45,7 +48,11 @@ var debug_flag:bool = true
 func _ready() -> void:
 	_reset()
 	print("[Game] ready")
+	
+	# Signal connnections
 	game_tick.connect(calculate_time_stats)
+	enemy_defeated.connect(_on_enemy_defeated)
+	level_up.connect(_on_level_up)
 
 
 ## Helper method to reset values on game start
@@ -74,3 +81,21 @@ func calculate_time_stats() -> void:
 func format_time(seconds: int) -> String:
 	@warning_ignore("INTEGER_DIVISION") 
 	return "%02d:%02d" % [seconds / 60, seconds % 60]
+
+
+## Handle XP when enemies are defeated
+func _on_enemy_defeated(_n: Node) -> void:
+	player_xp += 1
+	
+	# Level up logic
+	if player_xp >= level_xp_needed:
+		level_up.emit()
+
+
+## Handle level ups
+func _on_level_up() -> void:
+	print("[Game] Level up")
+	# Reset current XP amount
+	player_xp = 0
+	level_xp_needed *= (1.0 + GROWTH)
+	player_level += 1

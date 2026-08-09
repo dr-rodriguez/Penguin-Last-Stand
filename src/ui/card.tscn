@@ -2,6 +2,8 @@
 
 [ext_resource type="Theme" uid="uid://c3i1e2wloyui2" path="res://src/ui/ui_theme.tres" id="1_23fyk"]
 [ext_resource type="Texture2D" uid="uid://dok20bkn0htqj" path="res://assets/art/characters/player/penguin1.png" id="2_peddy"]
+[ext_resource type="Script" uid="uid://cdpsrvr84fonw" path="res://src/ui/card.gd" id="2_yi3o8"]
+[ext_resource type="Resource" uid="uid://t1vjn54ovjyr" path="res://src/resources/health_boost.tres" id="3_hq05s"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yi3o8"]
 bg_color = Color(0.10502044, 0.18517438, 0.25179803, 1)
@@ -16,6 +18,8 @@ corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 
 [node name="Card" type="Control" unique_id=1428885490]
+custom_minimum_size = Vector2(150, 200)
+custom_maximum_size = Vector2(150, 200)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,6 +27,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_23fyk")
+script = ExtResource("2_yi3o8")
+powerup = ExtResource("3_hq05s")
 
 [node name="Panel" type="Panel" parent="." unique_id=578823931]
 custom_minimum_size = Vector2(150, 200)
@@ -47,6 +53,7 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer" unique_id=521853016]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Title"
 horizontal_alignment = 1
@@ -60,18 +67,21 @@ theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
 [node name="Image" type="TextureRect" parent="Panel/MarginContainer/VBoxContainer/MarginContainer" unique_id=1488857116]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(60, 60)
 custom_maximum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("2_peddy")
 
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=663061330]
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=1467194468]
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_right = 20
 
 [node name="DescriptionLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/MarginContainer2" unique_id=1751820608]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 70)
+custom_maximum_size = Vector2(120, 70)
 layout_mode = 2
 text = "Description of 
 effect"
 horizontal_alignment = 1
+autowrap_mode = 2
