@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://enye5vtk8lwu"]
+
+[ext_resource type="PackedScene" uid="uid://c4vb3joi3rcuu" path="res://src/ui/card.tscn" id="1_6ow6c"]
+[ext_resource type="Script" uid="uid://ve66du3uatqh" path="res://src/ui/levelup/levelup.gd" id="1_qflqd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4ffcv"]
+bg_color = Color(0.101960786, 0.101960786, 0.101960786, 0.8235294)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.93577045, 0.77783334, 0.44595504, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Levelup" type="Control" unique_id=1126762511]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qflqd")
+
+[node name="Panel" type="Panel" parent="." unique_id=732567083]
+custom_maximum_size = Vector2(500, 280)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4ffcv")
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=213170711]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=332669846]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer" unique_id=1289541166]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Level Up!"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=1930952353]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 12
+
+[node name="Card1" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1428885490 instance=ExtResource("1_6ow6c")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Card2" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1079868385 instance=ExtResource("1_6ow6c")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Card3" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=550848331 instance=ExtResource("1_6ow6c")]
+unique_name_in_owner = true
+layout_mode = 2

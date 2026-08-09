@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://cepak02dmsxde" path="res://src/gameplay/enemies/Enemy.tscn" id="7_0kore"]
 [ext_resource type="PackedScene" uid="uid://vdxen4r0qq0f" path="res://src/ui/hud/hud.tscn" id="9_86u7o"]
 [ext_resource type="PackedScene" uid="uid://bt6h3kgxir3xo" path="res://src/ui/debug/debug_ui.tscn" id="9_tc86p"]
+[ext_resource type="PackedScene" uid="uid://enye5vtk8lwu" path="res://src/ui/levelup/levelup.tscn" id="10_rqvdb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6yl8a"]
 texture = ExtResource("1_3fed5")
@@ -118,6 +119,10 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Hud" parent="HudLayer/HudRoot" unique_id=1307281789 instance=ExtResource("9_86u7o")]
+layout_mode = 1
+
+[node name="Levelup" parent="HudLayer/HudRoot" unique_id=1126762511 instance=ExtResource("10_rqvdb")]
+visible = false
 layout_mode = 1
 
 [node name="PauseLayer" type="CanvasLayer" parent="." unique_id=1679763196]

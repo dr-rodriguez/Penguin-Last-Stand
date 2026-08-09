@@ -10,6 +10,7 @@ signal game_tick()
 signal run_won()
 signal run_lost()
 signal level_up()
+signal powerup_selected(name: String)
 
 ## Growth rate of difficulty/level up requirement
 const GROWTH: float = 0.1
@@ -17,11 +18,24 @@ const GROWTH: float = 0.1
 const MAX_TIME: int = 900
 
 # Player properties
-var player_xp: float = 0
-var player_health: float = 50.
+## Current XP toward next level, never negative
+var player_xp: float = 0:
+	set(value):
+		player_xp = maxf(value, 0.0)
+## Max health, never below 1
+var player_health: float = 50.0:
+	set(value):
+		player_health = maxf(value, 1.0)
+		# Re-clamp current health against the new max
+		current_player_health = current_player_health
+## Live health, clamped to [0, player_health]
+var current_player_health: float = 50.0:
+	set(value):
+		current_player_health = clampf(value, 0.0, player_health)
+## Player level
 var player_level: int = 1
-var current_player_health: float = 50.
-var level_xp_needed: float = 10
+## XP needed for a level up
+var level_xp_needed: float = 10.0
 
 # Player combat attributes
 var bullet_speed: float = 300.
@@ -34,7 +48,10 @@ var current_bullet_damage: float = 4.0
 ## Enemy type weight (below this value, second type shows up)
 var enemy_type_weight: float = 0.4
 ## Enemy spawn time (rate increases over time)
-var enemy_spawn_time: float = 1.0
+var enemy_spawn_time: float = 1.0:
+	set(value):
+		# Clamp to be within low/high thresholds
+		enemy_spawn_time = clampf(value, 0.2, 1.0)
 
 # Game stats
 var beaver_kills: int = 0
@@ -53,6 +70,7 @@ func _ready() -> void:
 	game_tick.connect(calculate_time_stats)
 	enemy_defeated.connect(_on_enemy_defeated)
 	level_up.connect(_on_level_up)
+	powerup_selected.connect(_on_powerup_selected)
 
 
 ## Helper method to reset values on game start
@@ -71,9 +89,7 @@ func calculate_time_stats() -> void:
 	
 	# Increase difficulty every 2 minutes
 	if time_elapsed % 120 == 0:
-		enemy_spawn_time = enemy_spawn_time * (1.0 - GROWTH)
-		# Clamp so we don't go above/below thresholds
-		enemy_spawn_time = clampf(enemy_spawn_time, 0.2, 1.0)
+		enemy_spawn_time *= (1.0 - GROWTH)
 		print("[Game] Spawn time now " + str(enemy_spawn_time))
 
 
@@ -94,8 +110,15 @@ func _on_enemy_defeated(_n: Node) -> void:
 
 ## Handle level ups
 func _on_level_up() -> void:
-	print("[Game] Level up")
 	# Reset current XP amount
 	player_xp = 0
 	level_xp_needed *= (1.0 + GROWTH)
 	player_level += 1
+	
+	print("[Game] Level up to " + str(player_level))
+
+
+## Handle power ups
+func _on_powerup_selected(name: String) -> void:
+	# TODO: Implement logid depending on which powerup was selected
+	pass
