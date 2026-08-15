@@ -20,8 +20,15 @@ func _ready() -> void:
 	time_label.text = Game.format_time(Game.MAX_TIME)
 
 
+func _update_xp_bar() -> void:
+	var tween := get_tree().create_tween().set_parallel()
+	tween.tween_property(xp_bar, "value", Game.player_xp, 0.2)
+	tween.tween_property(xp_bar, "max_value", Game.level_xp_needed, 0.2)
+
+
 func _on_player_hit() -> void:
-	var tween := get_tree().create_tween()
+	var tween := get_tree().create_tween().set_parallel()
+	tween.tween_property(health_bar, "max_value", Game.player_health, 0.2)
 	tween.tween_property(health_bar, "value", Game.current_player_health, 0.2)
 
 
@@ -30,9 +37,9 @@ func _on_game_tick() -> void:
 
 
 func _on_enemy_defeated(_n: Node) -> void:
-	var tween := get_tree().create_tween()
-	tween.tween_property(xp_bar, "value", Game.player_xp, 0.2)
+	_update_xp_bar()
 
 
 func _on_level_up() -> void:
 	level_label.text = "Level: " + str(Game.player_level)
+	_update_xp_bar()

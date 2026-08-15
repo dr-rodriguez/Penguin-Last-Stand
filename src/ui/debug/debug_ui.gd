@@ -11,10 +11,10 @@ func _ready() -> void:
 
 func _update_label(_n: Node) -> void:
 	debug_label.text = "XP: " + \
-	str(Game.player_xp) + \
+	"%.0f" % Game.player_xp + \
 	" BK: " + str(Game.beaver_kills) + \
 	" AK: " + str(Game.axolotl_kills) + \
-	"\nReq XP: " + str(Game.level_xp_needed)
+	"\nReq XP: " + "%.2f" % Game.level_xp_needed
 
 
 func _on_button_pressed() -> void:
