@@ -2,6 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://c4vb3joi3rcuu" path="res://src/ui/card.tscn" id="1_6ow6c"]
 [ext_resource type="Script" uid="uid://ve66du3uatqh" path="res://src/ui/levelup/levelup.gd" id="1_qflqd"]
+[ext_resource type="Script" uid="uid://bulq1r4uyoc1p" path="res://src/resources/powerup.gd" id="3_cdiai"]
+[ext_resource type="Texture2D" uid="uid://dok20bkn0htqj" path="res://assets/art/characters/player/penguin1.png" id="4_ddr4w"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4ffcv"]
 bg_color = Color(0.101960786, 0.101960786, 0.101960786, 0.8235294)
@@ -9,11 +11,35 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.93577045, 0.77783334, 0.44595504, 1)
+border_color = Color(0.9372549, 0.7764706, 0.44705883, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="Resource" id="Resource_y4s1f"]
+script = ExtResource("3_cdiai")
+name = "HealthBoost"
+texture = ExtResource("4_ddr4w")
+title = "Max Health Up"
+description = "Increase maximum health."
+metadata/_custom_type_script = "uid://bulq1r4uyoc1p"
+
+[sub_resource type="Resource" id="Resource_pmbwk"]
+script = ExtResource("3_cdiai")
+name = "HealthBoost"
+texture = ExtResource("4_ddr4w")
+title = "Max Health Up"
+description = "Increase maximum health."
+metadata/_custom_type_script = "uid://bulq1r4uyoc1p"
+
+[sub_resource type="Resource" id="Resource_ydchu"]
+script = ExtResource("3_cdiai")
+name = "HealthBoost"
+texture = ExtResource("4_ddr4w")
+title = "Max Health Up"
+description = "Increase maximum health."
+metadata/_custom_type_script = "uid://bulq1r4uyoc1p"
 
 [node name="Levelup" type="Control" unique_id=1126762511]
 layout_mode = 3
@@ -65,11 +91,14 @@ theme_override_constants/separation = 12
 [node name="Card1" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1428885490 instance=ExtResource("1_6ow6c")]
 unique_name_in_owner = true
 layout_mode = 2
+powerup = SubResource("Resource_y4s1f")
 
 [node name="Card2" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1079868385 instance=ExtResource("1_6ow6c")]
 unique_name_in_owner = true
 layout_mode = 2
+powerup = SubResource("Resource_pmbwk")
 
 [node name="Card3" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=550848331 instance=ExtResource("1_6ow6c")]
 unique_name_in_owner = true
 layout_mode = 2
+powerup = SubResource("Resource_ydchu")

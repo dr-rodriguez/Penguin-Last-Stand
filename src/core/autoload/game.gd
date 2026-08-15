@@ -61,6 +61,16 @@ var time_elapsed: int = 0
 
 var debug_flag:bool = true
 
+#region Power Up details
+## List of available power ups
+var power_up_list := [
+	preload("res://src/resources/damage_up.tres"),
+	preload("res://src/resources/fire_rate.tres"),
+	preload("res://src/resources/health_boost.tres"),
+]
+
+#endregion
+
 
 func _ready() -> void:
 	_reset()
@@ -117,8 +127,15 @@ func _on_level_up() -> void:
 	
 	print("[Game] Level up to " + str(player_level))
 
+	# Freeze the run until a power-up is picked
+	get_tree().paused = true
+
 
 ## Handle power ups
-func _on_powerup_selected(name: String) -> void:
-	# TODO: Implement logid depending on which powerup was selected
-	pass
+func _on_powerup_selected(power_up_name: String) -> void:
+	print("[Game] Choose " + power_up_name)
+	
+	# TODO: Implement logic depending on which powerup was selected
+	
+	# Resume the run now that the choice is made
+	get_tree().paused = false

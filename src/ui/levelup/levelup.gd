@@ -1,9 +1,22 @@
 extends Control
 
-@onready var card1 := %Card1
-@onready var card2 := %Card2
-@onready var card3 := %Card3
+@onready var card_list: Array = [%Card1, %Card2, %Card3]
+
 
 func _ready() -> void:
-	# TODO: Add logic to randomize the card options and set them
-	pass
+	Game.level_up.connect(show_options)
+	Game.powerup_selected.connect(_on_powerup_selected)
+
+
+## Deal a fresh random power-up to each card, then reveal the screen
+func show_options() -> void:
+	var pool: Array = Game.power_up_list.duplicate()
+	pool.shuffle()
+	for i in card_list.size():
+		card_list[i].powerup = pool[i]
+	show()
+
+
+func _on_powerup_selected(_power_up_name: String) -> void:
+	print("[LevelUp] done.")
+	hide()
