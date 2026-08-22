@@ -142,9 +142,7 @@ func _on_level_up() -> void:
 	_increase_difficulty()
 	
 	print("[Game] Level up to " + str(player_level))
-	
-	# Freeze the run until a power-up is picked
-	get_tree().paused = true
+	# MainGame freezes the run until a power-up is picked
 
 
 #region Power Up Logic
@@ -160,9 +158,7 @@ func _on_powerup_selected(power_up_name: String) -> void:
 			_apply_fire_rate_up()
 		"DamageUp":
 			_apply_damage_up()
-	
-	# Resume the run now that the choice is made
-	get_tree().paused = false
+	# MainGame resumes the run now that the choice is made
 
 ## Increase maximum health
 func _apply_health_boost() -> void:

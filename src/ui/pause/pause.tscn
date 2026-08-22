@@ -1,0 +1,215 @@
+[gd_scene format=3 uid="uid://drp21fw1kbdap"]
+
+[ext_resource type="Theme" uid="uid://c3i1e2wloyui2" path="res://src/ui/ui_theme.tres" id="1_242lp"]
+[ext_resource type="Script" uid="uid://dfkvveh004g8g" path="res://src/ui/pause/pause.gd" id="2_1cn4x"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_242lp"]
+bg_color = Color(0.10980392, 0.1882353, 0.25490198, 0.6156863)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1cn4x"]
+bg_color = Color(0.10980392, 0.1882353, 0.25490198, 0.6156863)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9372549, 0.7764706, 0.44705883, 1)
+border_blend = true
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Pause" type="Control" unique_id=1532816305]
+layout_mode = 3
+anchor_left = 0.2
+anchor_top = 0.13333334
+anchor_right = 0.79866016
+anchor_bottom = 0.7628112
+offset_right = 52.857544
+offset_bottom = 31.38797
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.878767, 0.8783412)
+theme = ExtResource("1_242lp")
+script = ExtResource("2_1cn4x")
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="." unique_id=1351640786]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_242lp")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1159411555]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer" unique_id=1192287630]
+layout_mode = 2
+
+[node name="MenuContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer" unique_id=1929511973]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MenuContainer" unique_id=727150742]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="ResumeButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/MenuContainer/VBoxContainer" unique_id=1815981713]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Resume"
+
+[node name="RestartButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/MenuContainer/VBoxContainer" unique_id=466796959]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Restart"
+
+[node name="QuitButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/MenuContainer/VBoxContainer" unique_id=1609869560]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Quit"
+
+[node name="TextPanel" type="Panel" parent="Panel/MarginContainer/HBoxContainer" unique_id=61192107]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_1cn4x")
+
+[node name="TextContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/TextPanel" unique_id=924579682]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer" unique_id=1849367995]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=49697478]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Game Paused"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=1882554086]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=1456463677]
+layout_mode = 2
+
+[node name="TimeLabel2" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer2" unique_id=419619167]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Time Left: "
+
+[node name="TimeLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer2" unique_id=2100343873]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+text = "999"
+horizontal_alignment = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=493392181]
+layout_mode = 2
+
+[node name="HealthLabel2" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer3" unique_id=1540206618]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Health: "
+
+[node name="HealthLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer3" unique_id=138031452]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+text = "0/0"
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=1490233871]
+layout_mode = 2
+
+[node name="LevelLabel2" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer6" unique_id=1490233872]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Level: "
+
+[node name="LevelLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer6" unique_id=1490233873]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+text = "1"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=341066474]
+layout_mode = 2
+
+[node name="HealthLabel2" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer4" unique_id=154487095]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "XP: "
+
+[node name="XPLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer4" unique_id=1160873124]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+text = "0/0"
+
+[node name="HSeparator2" type="HSeparator" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=1005741838]
+layout_mode = 2
+
+[node name="KillLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=2069860673]
+layout_mode = 2
+text = "Kills"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=1894788934]
+layout_mode = 2
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer" unique_id=195039327]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BeaverLabel2" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer/HBoxContainer4" unique_id=669431253]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Beavers: "
+
+[node name="BeaverLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer/HBoxContainer4" unique_id=1249251526]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+text = "1"
+
+[node name="VSeparator" type="VSeparator" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer" unique_id=1745070787]
+layout_mode = 2
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer" unique_id=1140769907]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AxolotlLabel2" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer/HBoxContainer5" unique_id=1657182953]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Axolotl: "
+
+[node name="AxolotlLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer/HBoxContainer5" unique_id=1577441911]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+text = "1"
+
+[connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/MenuContainer/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/MenuContainer/VBoxContainer/RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/MenuContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
