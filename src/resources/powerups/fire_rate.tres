@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="PowerUp" format=3 uid="uid://ta77hbo3s5ub"]
 
 [ext_resource type="Script" uid="uid://bulq1r4uyoc1p" path="res://src/resources/powerup.gd" id="1_33was"]
-[ext_resource type="Texture2D" uid="uid://bhihdjwxmbvrt" path="res://assets/art/characters/enemies/beaver1.png" id="2_x07fi"]
+[ext_resource type="Texture2D" uid="uid://cbtbmpb2fvv0s" path="res://assets/art/ui/icons/snowball2_powerup3.png" id="2_82w5x"]
 
 [resource]
 script = ExtResource("1_33was")
 name = "FireRateUp"
-texture = ExtResource("2_x07fi")
+texture = ExtResource("2_82w5x")
 title = "Snowball Speed"
 description = "Increase rate of throwing snowballs."
 metadata/_custom_type_script = "uid://bulq1r4uyoc1p"

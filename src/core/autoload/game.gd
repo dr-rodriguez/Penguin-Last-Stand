@@ -13,9 +13,11 @@ signal level_up()
 signal powerup_selected(name: String)
 
 ## Growth rate of difficulty/level up requirement
-const GROWTH: float = 0.1
+const GROWTH: float = 0.15
 ## Maximum time to count down from
-const MAX_TIME: int = 900
+const MAX_TIME: int = 600
+## Growth rate of power ups
+const POWER_GROWTH: float = 0.1
 
 # Player properties
 ## Current XP toward next level, never negative
@@ -60,7 +62,7 @@ var enemy_type_weight: float = 0.4
 var enemy_spawn_time: float = 1.0:
 	set(value):
 		# Clamp to be within low/high thresholds
-		enemy_spawn_time = clampf(value, 0.2, 1.0)
+		enemy_spawn_time = clampf(value, 0.1, 1.0)
 
 ## List of available power ups
 var power_up_list := [
@@ -172,8 +174,8 @@ func _apply_health_boost() -> void:
 
 ## Increase fire rate
 func _apply_fire_rate_up() -> void:
-	current_fire_interval *= (1.0 - GROWTH)
-	fire_interval *= (1.0 - GROWTH)
+	current_fire_interval *= (1.0 - POWER_GROWTH)
+	fire_interval *= (1.0 - POWER_GROWTH)
 	print("[Game] fire rate: " + str(current_fire_interval))
 
 ## Increase damage dealt

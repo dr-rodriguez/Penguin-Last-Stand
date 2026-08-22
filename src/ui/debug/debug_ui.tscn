@@ -7,30 +7,28 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 567.0
+offset_top = 301.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_mayck")
 
 [node name="Panel" type="Panel" parent="." unique_id=521697975]
-custom_minimum_size = Vector2(140, 70)
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -141.0
-offset_top = -61.0
-offset_right = -1.0
-offset_bottom = -1.0
-grow_horizontal = 0
-grow_vertical = 0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1827291815]
-layout_mode = 0
-offset_right = 100.0
-offset_bottom = 70.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
@@ -43,14 +41,14 @@ layout_mode = 2
 unique_name_in_owner = true
 custom_maximum_size = Vector2(140, -1)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 8
 text = "XP: 0 BK: 0 AK: 0 
 Req XP:"
 autowrap_mode = 2
 
 [node name="Button" type="Button" parent="Panel/MarginContainer/VBoxContainer" unique_id=193842358]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 8
 text = "Level Up"
 
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
