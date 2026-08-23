@@ -30,7 +30,7 @@ func _on_spawn_timer_timeout() -> void:
 	
 	# Randomize enemy type (change enemy.enemy_def)
 	var spawn_weight := randf()
-	if spawn_weight <= Game.enemy_type_weight:
+	if spawn_weight <= Stats.enemy_type_weight:
 		enemy.enemy_def = BEAVER
 	else:
 		enemy.enemy_def = AXOLOTL
@@ -39,7 +39,7 @@ func _on_spawn_timer_timeout() -> void:
 	enemy.launch(player)
 	
 	# Use latest spawn time
-	spawn_timer.start(Game.enemy_spawn_time)
+	spawn_timer.start(Stats.enemy_spawn_time)
 	
 	#print("[Spawner] Enemy " + enemy.enemy_def.name + " added")
 
@@ -50,9 +50,9 @@ func _on_enemy_defeated(enemy: Node) -> void:
 	
 	# Count score
 	if enemy.enemy_def.name == "Axolotl":
-		Game.axolotl_kills += 1
+		Stats.axolotl_kills += 1
 	elif enemy.enemy_def.name == "Beaver":
-		Game.beaver_kills += 1
+		Stats.beaver_kills += 1
 	# Player XP is handled by Game autoload
 	
 	# Release enemy back to pool

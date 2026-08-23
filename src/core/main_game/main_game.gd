@@ -21,7 +21,7 @@ func _ready() -> void:
 	Game.powerup_selected.connect(_on_powerup_selected)
 	pause_menu.resume_requested.connect(_pause_for.bind(PauseSource.NONE))
 
-	debug_layer.visible = Game.debug_flag
+	debug_layer.visible = Stats.debug_flag
 
 
 func _process(_delta: float) -> void:
@@ -69,7 +69,7 @@ func _fire_snowball() -> void:
 	snowball.launch()
 	
 	# Start the timer
-	shoot_timer.start(Game.current_fire_interval)
+	shoot_timer.start(Stats.current_fire_interval)
 	on_cooldown = true
 
 

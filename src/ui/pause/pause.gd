@@ -7,6 +7,8 @@ signal resume_requested
 @onready var health_label: Label = %HealthLabel
 @onready var level_label: Label = %LevelLabel
 @onready var xp_label: Label = %XPLabel
+@onready var fire_rate_label: Label = %FireRateLabel
+@onready var damage_label: Label = %DamageLabel
 @onready var beaver_label: Label = %BeaverLabel
 @onready var axo_label: Label = %AxolotlLabel
 
@@ -24,12 +26,30 @@ func _on_visibility_changed() -> void:
 
 ## Update all the text
 func update_labels() -> void:
-	time_label.text = Game.format_time(Game.MAX_TIME - Game.time_elapsed)
-	health_label.text = str(Game.current_player_health) + "/" + str(Game.player_health)
-	level_label.text = str(Game.player_level)
-	beaver_label.text = str(Game.beaver_kills)
-	axo_label.text = str(Game.axolotl_kills)
-	xp_label.text = str(Game.player_xp) + "/" + str(Game.level_xp_needed)
+	time_label.text = Game.format_time(Stats.MAX_TIME - Stats.time_elapsed)
+	health_label.text = _format_pair(Stats.current_player_health, Stats.player_health, 0)
+	level_label.text = str(Stats.player_level)
+	beaver_label.text = str(Stats.beaver_kills)
+	axo_label.text = str(Stats.axolotl_kills)
+	xp_label.text = _format_pair(Stats.player_xp, Stats.level_xp_needed, 0)
+	fire_rate_label.text = _format_stat(Stats.current_fire_interval, 2)
+	damage_label.text = _format_stat(Stats.current_bullet_damage, 1)
+
+
+## Formats a current/max stat pair to the given decimal count (e.g. "42/50")
+func _format_pair(current: float, maximum: float, precision: int = 0) -> String:
+	var spec: String = _decimal_spec(precision)
+	return (spec + "/" + spec) % [current, maximum]
+
+
+## Formats a single stat to the given decimal count (e.g. "4.5")
+func _format_stat(value: float, precision: int = 1) -> String:
+	return _decimal_spec(precision) % value
+
+
+## Builds a float format spec with the given decimal count (1 -> "%.1f")
+func _decimal_spec(precision: int) -> String:
+	return "%%.%df" % maxi(precision, 0)
 
 
 ## Resume the game
@@ -43,4 +63,7 @@ func _on_quit_button_pressed() -> void:
 
 
 func _on_restart_button_pressed() -> void:
-	pass # Replace with function body.
+	# TODO: Replace with a clearer thing- maybe go back to main screen
+	Stats.reset()
+	# To update the UI
+	Game.stats_refreshed.emit()

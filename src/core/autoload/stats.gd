@@ -1,0 +1,108 @@
+extends Node
+
+## Holds all per-run tuning values and mutable run state.
+## Game reads/writes these; Stats owns the defaults and the reset.
+
+## Growth rate of difficulty/level up requirement
+const GROWTH: float = 0.15
+## Maximum time to count down from
+const MAX_TIME: int = 600
+## Growth rate of power ups
+const POWER_GROWTH: float = 0.1
+
+#region Defaults
+const DEFAULT_PLAYER_HEALTH: float = 50.0
+const DEFAULT_LEVEL_XP_NEEDED: float = 10.0
+const DEFAULT_FIRE_INTERVAL: float = 0.5
+const DEFAULT_BULLET_SPEED: float = 300.0
+const DEFAULT_BULLET_DAMAGE: float = 4.0
+const DEFAULT_ENEMY_TYPE_WEIGHT: float = 0.4
+const DEFAULT_ENEMY_SPAWN_TIME: float = 0.8
+#endregion
+
+# Player properties
+## Current XP toward next level, never negative
+var player_xp: float = 0:
+	set(value):
+		player_xp = maxf(value, 0.0)
+## Max health, never below 1
+var player_health: float = DEFAULT_PLAYER_HEALTH:
+	set(value):
+		player_health = maxf(value, 1.0)
+		# Re-clamp current health against the new max
+		current_player_health = current_player_health
+## Live health, clamped to [0, player_health]
+var current_player_health: float = DEFAULT_PLAYER_HEALTH:
+	set(value):
+		current_player_health = clampf(value, 0.0, player_health)
+## Player level
+var player_level: int = 1
+## XP needed for a level up
+var level_xp_needed: float = DEFAULT_LEVEL_XP_NEEDED
+
+#region Player combat attributes
+## Fire rate, never below 0.1
+var fire_interval: float = DEFAULT_FIRE_INTERVAL:
+	set(value):
+		fire_interval = maxf(value, 0.1)
+## Current fire rate, clamped to [0.1, fire_interval]
+var current_fire_interval: float = DEFAULT_FIRE_INTERVAL:
+	set(value):
+		current_fire_interval = clampf(value, 0.1, fire_interval)
+
+var bullet_speed: float = DEFAULT_BULLET_SPEED
+var current_bullet_speed: float = DEFAULT_BULLET_SPEED
+var bullet_damage: float = DEFAULT_BULLET_DAMAGE
+var current_bullet_damage: float = DEFAULT_BULLET_DAMAGE
+#endregion
+
+## Enemy type weight (below this value, second type shows up)
+var enemy_type_weight: float = DEFAULT_ENEMY_TYPE_WEIGHT
+## Enemy spawn time (rate increases over time)
+var enemy_spawn_time: float = DEFAULT_ENEMY_SPAWN_TIME:
+	set(value):
+		# Clamp to be within low/high thresholds
+		enemy_spawn_time = clampf(value, 0.05, DEFAULT_ENEMY_SPAWN_TIME)
+
+## List of available power ups
+var power_up_list := [
+	preload("res://src/resources/powerups/damage_up.tres"),
+	preload("res://src/resources/powerups/fire_rate.tres"),
+	preload("res://src/resources/powerups/health_boost.tres"),
+]
+
+# Game stats
+var beaver_kills: int = 0
+var axolotl_kills: int = 0
+## Game time in seconds
+var time_elapsed: int = 0
+
+var debug_flag: bool = true
+
+
+func _ready() -> void:
+	print("[Stats] ready")
+
+
+## Restore every run value to its starting state
+func reset() -> void:
+	player_xp = 0.0
+	player_level = 1
+	level_xp_needed = DEFAULT_LEVEL_XP_NEEDED
+
+	player_health = DEFAULT_PLAYER_HEALTH
+	current_player_health = DEFAULT_PLAYER_HEALTH
+
+	fire_interval = DEFAULT_FIRE_INTERVAL
+	current_fire_interval = DEFAULT_FIRE_INTERVAL
+	bullet_speed = DEFAULT_BULLET_SPEED
+	current_bullet_speed = DEFAULT_BULLET_SPEED
+	bullet_damage = DEFAULT_BULLET_DAMAGE
+	current_bullet_damage = DEFAULT_BULLET_DAMAGE
+
+	enemy_type_weight = DEFAULT_ENEMY_TYPE_WEIGHT
+	enemy_spawn_time = DEFAULT_ENEMY_SPAWN_TIME
+
+	beaver_kills = 0
+	axolotl_kills = 0
+	time_elapsed = 0

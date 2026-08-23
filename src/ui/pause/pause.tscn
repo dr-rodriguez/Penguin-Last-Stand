@@ -166,6 +166,34 @@ layout_mode = 2
 size_flags_horizontal = 10
 text = "0/0"
 
+[node name="HBoxContainer7" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=1005741840]
+layout_mode = 2
+
+[node name="FireRateLabel2" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer7" unique_id=1005741841]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Fire Rate: "
+
+[node name="FireRateLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer7" unique_id=1005741842]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+text = "0.0"
+
+[node name="HBoxContainer8" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=1005741843]
+layout_mode = 2
+
+[node name="DamageLabel2" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer8" unique_id=1005741844]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Damage: "
+
+[node name="DamageLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer8" unique_id=1005741845]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+text = "0.0"
+
 [node name="HSeparator2" type="HSeparator" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=1005741838]
 layout_mode = 2
 

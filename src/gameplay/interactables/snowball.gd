@@ -4,14 +4,14 @@ const RANGE: float = 300.
 
 var direction := Vector2.ZERO
 var travelled_distance: float = 0.0
-var speed: float = Game.current_bullet_speed
+var speed: float = Stats.current_bullet_speed
 
 
 ## Reset any properties between acquisitions
 func _reset() -> void:
 	travelled_distance = 0.0
 	direction = Vector2.ZERO
-	speed = Game.current_bullet_speed
+	speed = Stats.current_bullet_speed
 
 
 func _physics_process(delta: float) -> void:
@@ -33,7 +33,7 @@ func launch() -> void:
 	
 	var mouse_pos: Vector2 = get_global_mouse_position()
 	direction = (mouse_pos - global_position).normalized()
-	speed = Game.current_bullet_speed
+	speed = Stats.current_bullet_speed
 
 
 ## Hit an enemy
@@ -42,7 +42,7 @@ func _on_body_entered(body: Node2D) -> void:
 	if "Enemy" in body.get_groups():
 		#print("[Snowball] hit enemy " + str(body))
 		# Do damage to enemy
-		body.take_damage(Game.current_bullet_damage)
+		body.take_damage(Stats.current_bullet_damage)
 		Game.snowball_done.emit(self)
 	else:
 		return

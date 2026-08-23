@@ -43,7 +43,7 @@ func _check_enemy_contact() -> void:
 		
 		# Reciprocal damage to enemy
 		# TODO: Decide if this should be bullet damage or some other value
-		body.take_damage(Game.current_bullet_damage)
+		body.take_damage(Stats.current_bullet_damage)
 		
 		# Start cooldown so player doesn't take too much damage
 		damage_cooldown.start()
@@ -52,14 +52,14 @@ func _check_enemy_contact() -> void:
 
 ## Method for player to take damage
 func take_damage(value: float) -> void:
-	Game.current_player_health -= value
+	Stats.current_player_health -= value
 	damage_fx()
 	Game.player_hit.emit()
 	
 	# TODO: Add logic for when below 0 health
 	
 	# Emit signal when player lost
-	if Game.current_player_health <= 0:
+	if Stats.current_player_health <= 0:
 		Game.run_lost.emit()
 
 
