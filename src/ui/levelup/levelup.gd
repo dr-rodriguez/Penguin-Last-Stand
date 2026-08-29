@@ -19,5 +19,8 @@ func show_options() -> void:
 
 
 func _on_powerup_selected(_power_up_name: String) -> void:
+	# Play click sound
+	Game.button_click_sfx()
+	
 	print("[LevelUp] done.")
 	hide()

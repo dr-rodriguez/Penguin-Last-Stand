@@ -55,9 +55,16 @@ unique_name_in_owner = true
 autostart = true
 ignore_time_scale = true
 
-[node name="MusicPlayer" type="AudioStreamPlayer" parent="Systems" unique_id=1100484587]
+[node name="MusicPlayerA" type="AudioStreamPlayer" parent="Systems" unique_id=1100484587]
+unique_name_in_owner = true
+process_mode = 3
+
+[node name="MusicPlayerB" type="AudioStreamPlayer" parent="Systems" unique_id=1309429847]
+unique_name_in_owner = true
+process_mode = 3
 
 [node name="SfxPlayer" type="AudioStreamPlayer" parent="Systems" unique_id=862668885]
+unique_name_in_owner = true
 
 [node name="World" type="Node2D" parent="." unique_id=986561419]
 unique_name_in_owner = true

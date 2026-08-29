@@ -60,14 +60,17 @@ func _decimal_spec(precision: int) -> String:
 
 ## Resume the game
 func _on_resume_button_pressed() -> void:
+	Game.button_click_sfx()
 	resume_requested.emit()
 
 
 ## Close the game entirely
 func _on_quit_button_pressed() -> void:
+	Game.button_click_sfx()
 	get_tree().quit()
 
 
 ## Go back to start menu
 func _on_restart_button_pressed() -> void:
+	Game.button_click_sfx()
 	Game.start_menu_requested.emit()

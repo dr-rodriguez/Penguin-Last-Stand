@@ -8,6 +8,7 @@ var direction: Vector2 = Vector2.ZERO
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var hurt_box: Area2D = $HurtBox
 @onready var damage_cooldown: Timer = $DamageCooldown
+@onready var sfx_player: AudioStreamPlayer = %SfxPlayer
 
 
 func _physics_process(_delta: float) -> void:
@@ -55,6 +56,10 @@ func take_damage(value: float) -> void:
 	Stats.current_player_health -= value
 	damage_fx()
 	Game.player_hit.emit()
+	
+	# Play on-hit sfx
+	sfx_player.stream = Game.IMPACT_SFX
+	sfx_player.play()
 	
 	# TODO: Add logic for when below 0 health
 	

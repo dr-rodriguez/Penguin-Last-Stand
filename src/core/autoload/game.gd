@@ -15,8 +15,22 @@ signal stats_refreshed()
 signal start_menu_requested()
 signal game_started()
 
+const START_MUSIC := preload("res://assets/audio/music/music_kulluh_Pink_Shores_36.mp3")
+const GAME_MUSIC := preload("res://assets/audio/music/music_zapsplat_game_music_action_retro_8_bit_repeating_016.mp3")
+const SNOWBALL_SFX := preload("res://assets/audio/sfx/zapsplat_science_fiction_cannon_fire_85646.mp3")
+const CLICK_SFX := preload("res://assets/audio/sfx/zapsplat_multimedia_beep_soft_click_button_87548.mp3")
+const IMPACT_SFX := preload("res://assets/audio/sfx/zapsplat_impacts_body_person_heavy_005_43768.mp3")
+
+## Create new audio player for button click sounds
+var sfx_player: AudioStreamPlayer
+
 
 func _ready() -> void:
+	# Always process, so UI sounds still play while the tree is paused
+	sfx_player = AudioStreamPlayer.new()
+	sfx_player.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(sfx_player)
+
 	Stats.reset()
 	print("[Game] ready")
 	
@@ -112,3 +126,9 @@ func _apply_damage_up() -> void:
 	print("[Game] damage: " + str(Stats.current_bullet_damage))
 
 #endregion
+
+
+## Shared UI click sound, callable from any script as Game.button_click_sfx()
+func button_click_sfx() -> void:
+	sfx_player.stream = CLICK_SFX
+	sfx_player.play()

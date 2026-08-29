@@ -14,10 +14,17 @@ enum PauseSource { NONE, START, MENU, LEVEL_UP }
 @onready var start_menu: Control = %Start
 @onready var world_layer := %World
 @onready var hud_layer := %HudLayer
+@onready var music_player_a: AudioStreamPlayer = %MusicPlayerA
+@onready var music_player_b: AudioStreamPlayer = %MusicPlayerB
+@onready var sfx_player: AudioStreamPlayer = %SfxPlayer
 
+const MUSIC_FADE: float = 0.8
 
 var on_cooldown: bool = false
 var pause_source: PauseSource = PauseSource.NONE
+var music_tween: Tween
+## The player that owns the audible track; the other one is free to fade in
+var music_current: AudioStreamPlayer
 
 
 func _ready() -> void:
@@ -73,9 +80,13 @@ func _on_powerup_selected(_power_up_name: String) -> void:
 
 ## Show the start menu
 func _show_start_menu() -> void:
+	# Start music
+	play_music_track(Game.START_MUSIC)
+	
 	# Make sure stats are reset
 	Stats.reset()
 	Game.stats_refreshed.emit()
+	
 	# Despawn all enemies/snowballs
 	_clear_pool(snowball_pool, "Bullet")
 	_clear_pool(enemy_pool, "Enemy")
@@ -91,11 +102,48 @@ func _show_start_menu() -> void:
 ## Start the game
 func _start_game() -> void:
 	# Unpause and hide the start menu
-	_toggle_pause()
+	_pause_for(PauseSource.NONE)
 	start_menu.visible = false
+	
 	# Show the world and hud
 	world_layer.visible = true
 	hud_layer.visible = true
+	
+	# Game music
+	play_music_track(Game.GAME_MUSIC)
+
+
+## Play music tracks, crossfading between them
+func play_music_track(track: AudioStream) -> void:
+	# Already the audible track, nothing to do
+	if music_current != null and music_current.stream == track:
+		return
+
+	# Swap players: whatever isn't current takes the new track
+	var prev := music_current
+	var next := music_player_b if music_current == music_player_a else music_player_a
+	music_current = next
+
+	# Remove any existing music_tween
+	if music_tween != null and music_tween.is_valid():
+		music_tween.kill()
+
+	# Set the next track
+	next.stream = track
+	next.volume_linear = 0.0
+	next.play()
+
+	# Use a tween to fade in/out a music track
+	music_tween = create_tween()
+	music_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	music_tween.set_parallel(true)
+
+	# Fade out prev (first call has none), fade in next
+	if prev != null:
+		music_tween.tween_property(prev, "volume_linear", 0.0, MUSIC_FADE)
+		# Free the player once it's silent, so it's clean for the next swap
+		music_tween.finished.connect(prev.stop)
+	music_tween.tween_property(next, "volume_linear", 1.0, MUSIC_FADE)
 
 
 ## Clear all objects in the pool (enemies, bullets)
@@ -113,6 +161,9 @@ func _fire_snowball() -> void:
 		return
 	snowball.global_position = shoot_point.global_position
 	snowball.launch()
+	
+	sfx_player.stream = Game.SNOWBALL_SFX
+	sfx_player.play()
 	
 	# Start the timer
 	shoot_timer.start(Stats.current_fire_interval)
