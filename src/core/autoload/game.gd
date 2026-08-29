@@ -49,8 +49,8 @@ func calculate_time_stats() -> void:
 	if Stats.time_elapsed >= Stats.MAX_TIME:
 		run_won.emit()
 	
-	# Increase difficulty every 2 minutes
-	if Stats.time_elapsed % 120 == 0:
+	# Increase difficulty periodically
+	if Stats.time_elapsed % Stats.DIFFICULTY_TIMER == 0:
 		_increase_difficulty()
 
 
@@ -111,19 +111,16 @@ func _on_powerup_selected(power_up_name: String) -> void:
 func _apply_health_boost() -> void:
 	Stats.player_health += 10.
 	Stats.current_player_health += 10.
-	print("[Game] health: " + str(Stats.current_player_health) + "/" + str(Stats.player_health))
 
 ## Increase fire rate
 func _apply_fire_rate_up() -> void:
 	Stats.current_fire_interval *= (1.0 - Stats.POWER_GROWTH)
 	Stats.fire_interval *= (1.0 - Stats.POWER_GROWTH)
-	print("[Game] fire rate: " + str(Stats.current_fire_interval))
 
 ## Increase damage dealt
 func _apply_damage_up() -> void:
 	Stats.current_bullet_damage += 1
 	Stats.bullet_damage += 1.0
-	print("[Game] damage: " + str(Stats.current_bullet_damage))
 
 #endregion
 

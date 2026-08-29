@@ -6,5 +6,8 @@
 [resource]
 script = ExtResource("1_wyw24")
 texture = ExtResource("2_wyw24")
+health = 8.0
+speed = 15.0
+damage = 2.0
 name = "Beaver"
 metadata/_custom_type_script = "uid://cihybvhpvn5ve"

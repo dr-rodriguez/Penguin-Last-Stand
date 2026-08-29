@@ -40,8 +40,6 @@ func _on_spawn_timer_timeout() -> void:
 	
 	# Use latest spawn time
 	spawn_timer.start(Stats.enemy_spawn_time)
-	
-	#print("[Spawner] Enemy " + enemy.enemy_def.name + " added")
 
 
 ## Release a defeated enemy

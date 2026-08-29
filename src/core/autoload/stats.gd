@@ -6,9 +6,13 @@ extends Node
 ## Growth rate of difficulty/level up requirement
 const GROWTH: float = 0.15
 ## Maximum time to count down from
-const MAX_TIME: int = 600
+const MAX_TIME: int = 300
 ## Growth rate of power ups
 const POWER_GROWTH: float = 0.1
+## Difficulty increase timer
+const DIFFICULTY_TIMER: int = 30
+## Minimum possible enemy spawn time
+const MINIMUM_ENEMY_SPAWN_TIME: float = 0.01
 
 #region Defaults
 const DEFAULT_PLAYER_HEALTH: float = 50.0
@@ -16,8 +20,8 @@ const DEFAULT_LEVEL_XP_NEEDED: float = 10.0
 const DEFAULT_FIRE_INTERVAL: float = 0.5
 const DEFAULT_BULLET_SPEED: float = 300.0
 const DEFAULT_BULLET_DAMAGE: float = 4.0
-const DEFAULT_ENEMY_TYPE_WEIGHT: float = 0.4
-const DEFAULT_ENEMY_SPAWN_TIME: float = 0.8
+const DEFAULT_ENEMY_TYPE_WEIGHT: float = 0.35
+const DEFAULT_ENEMY_SPAWN_TIME: float = 0.5
 #endregion
 
 # Player properties
@@ -62,7 +66,7 @@ var enemy_type_weight: float = DEFAULT_ENEMY_TYPE_WEIGHT
 var enemy_spawn_time: float = DEFAULT_ENEMY_SPAWN_TIME:
 	set(value):
 		# Clamp to be within low/high thresholds
-		enemy_spawn_time = clampf(value, 0.05, DEFAULT_ENEMY_SPAWN_TIME)
+		enemy_spawn_time = clampf(value, MINIMUM_ENEMY_SPAWN_TIME, DEFAULT_ENEMY_SPAWN_TIME)
 
 ## List of available power ups
 var power_up_list := [
