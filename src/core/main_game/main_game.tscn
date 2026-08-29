@@ -102,6 +102,9 @@ rotation = -0.0111566605
 [node name="SpawnTimer" type="Timer" parent="World/EntityRoot/Player/Spawner" unique_id=2055835520]
 autostart = true
 
+[node name="SpawnTimer2" type="Timer" parent="World/EntityRoot/Player/Spawner" unique_id=452324123]
+autostart = true
+
 [node name="Camera2D" type="Camera2D" parent="World/EntityRoot/Player" unique_id=2057989762]
 zoom = Vector2(2, 2)
 
@@ -195,4 +198,5 @@ layout_mode = 1
 
 [connection signal="timeout" from="Systems/GameTimer" to="." method="_on_game_timer_timeout"]
 [connection signal="timeout" from="World/EntityRoot/Player/Spawner/SpawnTimer" to="World/EntityRoot/Player/Spawner" method="_on_spawn_timer_timeout"]
+[connection signal="timeout" from="World/EntityRoot/Player/Spawner/SpawnTimer2" to="World/EntityRoot/Player/Spawner" method="_on_distant_player"]
 [connection signal="timeout" from="World/EntityRoot/ShootTimer" to="." method="_on_shoot_timer_timeout"]
