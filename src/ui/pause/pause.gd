@@ -49,6 +49,12 @@ func _format_stat(value: float, precision: int = 1) -> String:
 
 ## Builds a float format spec with the given decimal count (1 -> "%.1f")
 func _decimal_spec(precision: int) -> String:
+	# "%%.%df"   template
+	#  ^^        -> "%"      literal percent
+	#    ^       -> "."      literal dot
+	#     ^^     -> "1"      maxi(1, 0) substituted
+	#       ^    -> "f"      literal f
+	# result: "%.1f"
 	return "%%.%df" % maxi(precision, 0)
 
 
@@ -62,8 +68,6 @@ func _on_quit_button_pressed() -> void:
 	get_tree().quit()
 
 
+## Go back to start menu
 func _on_restart_button_pressed() -> void:
-	# TODO: Replace with a clearer thing- maybe go back to main screen
-	Stats.reset()
-	# To update the UI
-	Game.stats_refreshed.emit()
+	Game.start_menu_requested.emit()

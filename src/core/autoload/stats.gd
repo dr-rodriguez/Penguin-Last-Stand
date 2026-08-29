@@ -77,7 +77,7 @@ var axolotl_kills: int = 0
 ## Game time in seconds
 var time_elapsed: int = 0
 
-var debug_flag: bool = true
+var debug_flag: bool = false
 
 
 func _ready() -> void:

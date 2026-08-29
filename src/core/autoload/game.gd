@@ -12,6 +12,8 @@ signal run_lost()
 signal level_up()
 signal powerup_selected(name: String)
 signal stats_refreshed()
+signal start_menu_requested()
+signal game_started()
 
 
 func _ready() -> void:

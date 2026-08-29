@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://bt6h3kgxir3xo" path="res://src/ui/debug/debug_ui.tscn" id="9_tc86p"]
 [ext_resource type="PackedScene" uid="uid://enye5vtk8lwu" path="res://src/ui/levelup/levelup.tscn" id="10_rqvdb"]
 [ext_resource type="PackedScene" uid="uid://drp21fw1kbdap" path="res://src/ui/pause/pause.tscn" id="11_1aoel"]
+[ext_resource type="PackedScene" uid="uid://vhcph5wyh8wa" path="res://src/ui/start/start.tscn" id="12_llqnb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6yl8a"]
 texture = ExtResource("1_3fed5")
@@ -54,7 +55,12 @@ unique_name_in_owner = true
 autostart = true
 ignore_time_scale = true
 
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="Systems" unique_id=1100484587]
+
+[node name="SfxPlayer" type="AudioStreamPlayer" parent="Systems" unique_id=862668885]
+
 [node name="World" type="Node2D" parent="." unique_id=986561419]
+unique_name_in_owner = true
 process_mode = 1
 
 [node name="LevelRoot" type="Node2D" parent="World" unique_id=2005561002]
@@ -108,6 +114,7 @@ one_shot = true
 [node name="EffectRoot" type="Node2D" parent="World" unique_id=1401247462]
 
 [node name="HudLayer" type="CanvasLayer" parent="." unique_id=9410596]
+unique_name_in_owner = true
 process_mode = 1
 layer = 10
 
@@ -151,9 +158,16 @@ layer = 100
 
 [node name="TransitionRoot" type="Control" parent="TransitionLayer" unique_id=1265130052]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Start" parent="TransitionLayer/TransitionRoot" unique_id=935905981 instance=ExtResource("12_llqnb")]
+unique_name_in_owner = true
+layout_mode = 1
 
 [node name="DebugLayer" type="CanvasLayer" parent="." unique_id=1927265430]
 process_mode = 3

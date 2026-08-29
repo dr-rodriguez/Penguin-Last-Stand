@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://vhcph5wyh8wa"]
+
+[ext_resource type="Theme" uid="uid://c3i1e2wloyui2" path="res://src/ui/ui_theme.tres" id="1_c8jcb"]
+[ext_resource type="Script" uid="uid://crrewoctoij41" path="res://src/ui/start/start.gd" id="2_dxjuo"]
+[ext_resource type="Texture2D" uid="uid://c41jhehtigl45" path="res://assets/art/world/backgrounds/screenshot1.png" id="3_lfw0m"]
+
+[sub_resource type="Gradient" id="Gradient_dxjuo"]
+offsets = PackedFloat32Array(0, 0.766129, 1)
+colors = PackedColorArray(1, 1, 1, 0, 0.08627451, 0.08627451, 0.44705883, 0.7176471, 0, 0, 0.39607844, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4ffcv"]
+gradient = SubResource("Gradient_dxjuo")
+fill = 1
+fill_from = Vector2(0.508547, 0.508547)
+fill_to = Vector2(0.06410257, 0.055555556)
+
+[node name="Start" type="Control" unique_id=935905981]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_c8jcb")
+script = ExtResource("2_dxjuo")
+
+[node name="Background" type="TextureRect" parent="." unique_id=623651516]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.03025
+anchor_bottom = 1.0797222
+offset_right = 608.64
+offset_bottom = 261.30002
+scale = Vector2(0.52, 0.598)
+texture = ExtResource("3_lfw0m")
+stretch_mode = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1507510933]
+clip_children = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_4ffcv")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=85414052]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.32109374
+anchor_right = 0.67890626
+anchor_bottom = 0.11388889
+grow_horizontal = 2
+theme_override_constants/margin_top = 30
+metadata/_edit_use_anchors_ = true
+
+[node name="TitleLabel" type="Label" parent="MarginContainer" unique_id=935591956]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Penguin's Last Stand"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=748756785]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4515625
+anchor_top = 0.40555555
+anchor_right = 0.5484375
+anchor_bottom = 0.59444445
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=766672532]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer" unique_id=989345055]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=1182950237]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Start"
+
+[node name="QuitButton" type="Button" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=919415747]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Quit"
+
+[connection signal="pressed" from="VBoxContainer/MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
