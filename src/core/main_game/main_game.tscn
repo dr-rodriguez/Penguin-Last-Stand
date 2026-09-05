@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://dmd5smbftund8"]
 
-[ext_resource type="Texture2D" uid="uid://ydhc2pyfnbeb" path="res://assets/art/world/tilesets/ground_tiles.png" id="1_3fed5"]
 [ext_resource type="Script" uid="uid://bo8ckc7crryf4" path="res://src/core/main_game/main_game.gd" id="1_n4iq1"]
 [ext_resource type="Script" uid="uid://bspvswct7wgpm" path="res://src/levels/map_area.gd" id="2_6n4xl"]
 [ext_resource type="PackedScene" uid="uid://dvhevmaxjus1t" path="res://src/gameplay/player/player.tscn" id="2_6yl8a"]
+[ext_resource type="Texture2D" uid="uid://clcwf8x6m6kp7" path="res://assets/art/world/tilesets/ground_tiles2.png" id="2_e0ob3"]
 [ext_resource type="Script" uid="uid://eigiawxlejx6" path="res://src/core/pool.gd" id="2_l0hoa"]
 [ext_resource type="PackedScene" uid="uid://t6ry3xpg8q7o" path="res://src/gameplay/interactables/snowball.tscn" id="3_0kore"]
 [ext_resource type="Script" uid="uid://b2owcr3iefk4m" path="res://src/core/main_game/spawner.gd" id="5_l0hoa"]
@@ -16,7 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://d0sf6okk6q5iy" path="res://src/ui/score/score.tscn" id="13_e0ob3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6yl8a"]
-texture = ExtResource("1_3fed5")
+texture = ExtResource("2_e0ob3")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
