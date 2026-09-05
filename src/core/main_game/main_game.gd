@@ -1,7 +1,7 @@
 extends Node
 
 ## Which UI currently owns the pause, so two of them can't fight over it
-enum PauseSource { NONE, START, MENU, LEVEL_UP }
+enum PauseSource { NONE, START, MENU, LEVEL_UP, GAME_END }
 
 @onready var enemy_pool: Pool = %EnemyPool
 @onready var snowball_pool: Pool = %SnowballPool
@@ -12,6 +12,7 @@ enum PauseSource { NONE, START, MENU, LEVEL_UP }
 @onready var game_timer: Timer = %GameTimer
 @onready var pause_menu: Control = %Pause
 @onready var start_menu: Control = %Start
+@onready var score_menu: Control = %Score
 @onready var world_layer := %World
 @onready var hud_layer := %HudLayer
 @onready var music_player_a: AudioStreamPlayer = %MusicPlayerA
@@ -38,6 +39,7 @@ func _ready() -> void:
 	Game.game_started.connect(_start_game)
 	pause_menu.resume_requested.connect(_pause_for.bind(PauseSource.NONE))
 	Game.start_menu_requested.connect(_show_start_menu)
+	Game.game_ended.connect(_show_game_over)
 
 	debug_layer.visible = Stats.debug_flag
 
@@ -71,6 +73,7 @@ func _pause_for(source: PauseSource) -> void:
 	get_tree().paused = source != PauseSource.NONE
 	start_menu.visible = source == PauseSource.START
 	pause_menu.visible = source == PauseSource.MENU
+	score_menu.visible = source == PauseSource.GAME_END
 
 
 ## A power-up choice ends the level-up pause
@@ -97,6 +100,22 @@ func _show_start_menu() -> void:
 	
 	# Pause until player action
 	_pause_for(PauseSource.START)
+
+
+## Show the game over screen
+func _show_game_over() -> void:
+	# Start music
+	play_music_track(Game.START_MUSIC)
+	
+	# Despawn all enemies/snowballs
+	_clear_pool(snowball_pool, "Bullet")
+	_clear_pool(enemy_pool, "Enemy")
+	
+	# Hide the hud
+	hud_layer.visible = false
+	
+	# Pause until player action
+	_pause_for(PauseSource.GAME_END)
 
 
 ## Start the game

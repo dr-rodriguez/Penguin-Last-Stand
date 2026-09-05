@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://enye5vtk8lwu" path="res://src/ui/levelup/levelup.tscn" id="10_rqvdb"]
 [ext_resource type="PackedScene" uid="uid://drp21fw1kbdap" path="res://src/ui/pause/pause.tscn" id="11_1aoel"]
 [ext_resource type="PackedScene" uid="uid://vhcph5wyh8wa" path="res://src/ui/start/start.tscn" id="12_llqnb"]
+[ext_resource type="PackedScene" uid="uid://d0sf6okk6q5iy" path="res://src/ui/score/score.tscn" id="13_e0ob3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6yl8a"]
 texture = ExtResource("1_3fed5")
@@ -177,6 +178,11 @@ mouse_filter = 2
 
 [node name="Start" parent="TransitionLayer/TransitionRoot" unique_id=935905981 instance=ExtResource("12_llqnb")]
 unique_name_in_owner = true
+layout_mode = 1
+
+[node name="Score" parent="TransitionLayer/TransitionRoot" unique_id=62799 instance=ExtResource("13_e0ob3")]
+unique_name_in_owner = true
+visible = false
 layout_mode = 1
 
 [node name="DebugLayer" type="CanvasLayer" parent="." unique_id=1927265430]

@@ -60,12 +60,8 @@ func take_damage(value: float) -> void:
 	# Play on-hit sfx
 	sfx_player.stream = Game.IMPACT_SFX
 	sfx_player.play()
-	
-	# TODO: Add logic for when below 0 health
-	
-	# Emit signal when player lost
-	if Stats.current_player_health <= 0:
-		Game.run_lost.emit()
+
+	# Game.game_ended is emitted from Game._check_game_end() when health hits 0
 
 
 ## Damage FX indicator

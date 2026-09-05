@@ -7,13 +7,12 @@ signal snowball_done(n: Node)
 signal enemy_defeated(n: Node)
 signal player_hit()
 signal game_tick()
-signal run_won()
-signal run_lost()
 signal level_up()
 signal powerup_selected(name: String)
 signal stats_refreshed()
 signal start_menu_requested()
 signal game_started()
+signal game_ended()
 
 const START_MUSIC := preload("res://assets/audio/music/music_kulluh_Pink_Shores_36.mp3")
 const GAME_MUSIC := preload("res://assets/audio/music/music_zapsplat_game_music_action_retro_8_bit_repeating_016.mp3")
@@ -45,19 +44,12 @@ func _ready() -> void:
 func calculate_time_stats() -> void:
 	Stats.time_elapsed += 1
 	
-	# Reached end time, emit win signal
-	if Stats.time_elapsed >= Stats.MAX_TIME:
-		run_won.emit()
+	# Check if game is over
+	_check_game_end()
 	
 	# Increase difficulty periodically
 	if Stats.time_elapsed % Stats.DIFFICULTY_TIMER == 0:
 		_increase_difficulty()
-
-
-## Formats a time in seconds as MM:SS (e.g. 900 -> "15:00")
-func format_time(seconds: int) -> String:
-	@warning_ignore("INTEGER_DIVISION") 
-	return "%02d:%02d" % [seconds / 60, seconds % 60]
 
 
 ## Handle XP when enemies are defeated
@@ -87,6 +79,23 @@ func _on_level_up() -> void:
 	
 	print("[Game] Level up to " + str(Stats.player_level))
 	# MainGame freezes the run until a power-up is picked
+
+
+## Check if the game is over
+func _check_game_end() -> void:
+	# Player reached the end of the timer
+	if Stats.time_elapsed >= Stats.MAX_TIME:
+		Stats.victory_flag = true
+		game_ended.emit()
+		return
+	# Player lost
+	elif Stats.current_player_health <= 0:
+		Stats.victory_flag = false
+		game_ended.emit()
+		return
+	# No action, continue the game
+	else:
+		return
 
 
 #region Power Up Logic
@@ -129,3 +138,33 @@ func _apply_damage_up() -> void:
 func button_click_sfx() -> void:
 	sfx_player.stream = CLICK_SFX
 	sfx_player.play()
+
+
+#region Formatting functions
+## Formats a time in seconds as MM:SS (e.g. 900 -> "15:00")
+func format_time(seconds: int) -> String:
+	@warning_ignore("INTEGER_DIVISION") 
+	return "%02d:%02d" % [seconds / 60, seconds % 60]
+
+
+## Builds a float format spec with the given decimal count (1 -> "%.1f")
+func _decimal_spec(precision: int) -> String:
+	# "%%.%df"   template
+	#  ^^        -> "%"      literal percent
+	#    ^       -> "."      literal dot
+	#     ^^     -> "1"      maxi(1, 0) substituted
+	#       ^    -> "f"      literal f
+	# result: "%.1f"
+	return "%%.%df" % maxi(precision, 0)
+
+
+## Formats a current/max stat pair to the given decimal count (e.g. "42/50")
+func format_pair(current: float, maximum: float, precision: int = 0) -> String:
+	var spec: String = _decimal_spec(precision)
+	return (spec + "/" + spec) % [current, maximum]
+
+
+## Formats a single stat to the given decimal count (e.g. "4.5")
+func format_stat(value: float, precision: int = 1) -> String:
+	return _decimal_spec(precision) % value
+#endregion

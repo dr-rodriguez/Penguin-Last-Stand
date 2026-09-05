@@ -24,7 +24,7 @@ const DEFAULT_ENEMY_TYPE_WEIGHT: float = 0.35
 const DEFAULT_ENEMY_SPAWN_TIME: float = 0.5
 #endregion
 
-# Player properties
+#region Player properties
 ## Current XP toward next level, never negative
 var player_xp: float = 0:
 	set(value):
@@ -43,6 +43,11 @@ var current_player_health: float = DEFAULT_PLAYER_HEALTH:
 var player_level: int = 1
 ## XP needed for a level up
 var level_xp_needed: float = DEFAULT_LEVEL_XP_NEEDED
+## Score value
+var score: int = 0
+## Game won/lost flag
+var victory_flag: bool = false
+#endregion
 
 #region Player combat attributes
 ## Fire rate, never below 0.1
@@ -91,6 +96,8 @@ func _ready() -> void:
 ## Restore every run value to its starting state
 func reset() -> void:
 	player_xp = 0.0
+	score = 0
+	victory_flag = false
 	player_level = 1
 	level_xp_needed = DEFAULT_LEVEL_XP_NEEDED
 
@@ -110,3 +117,11 @@ func reset() -> void:
 	beaver_kills = 0
 	axolotl_kills = 0
 	time_elapsed = 0
+
+
+## Calculate the final score
+func calculate_score() -> void:
+	score = time_elapsed + beaver_kills * 2 + axolotl_kills \
+	+ int(player_health - DEFAULT_PLAYER_HEALTH) \
+	+ int(current_player_health - DEFAULT_PLAYER_HEALTH) \
+	+ player_level * 5
