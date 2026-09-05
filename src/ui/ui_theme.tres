@@ -1,5 +1,7 @@
 [gd_resource type="Theme" format=3 uid="uid://c3i1e2wloyui2"]
 
+[ext_resource type="FontFile" uid="uid://benw0266pyq04" path="res://assets/art/ui/fonts/Super Bouncer.ttf" id="1_wksio"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lupir"]
 bg_color = Color(0.10502044, 0.18517438, 0.25179803, 1)
 border_width_left = 2
@@ -63,11 +65,13 @@ color = Color(0.30387083, 0.46045238, 0.59457064, 1)
 vertical = true
 
 [resource]
+Button/fonts/font = ExtResource("1_wksio")
 Button/styles/hover = SubResource("StyleBoxFlat_lupir")
 Button/styles/normal = SubResource("StyleBoxFlat_xm6e3")
 Button/styles/pressed = SubResource("StyleBoxFlat_e3gja")
 Label/constants/outline_size = 2
 Label/font_sizes/font_size = 14
+Label/fonts/font = ExtResource("1_wksio")
 MarginContainer/constants/margin_bottom = 5
 MarginContainer/constants/margin_left = 5
 MarginContainer/constants/margin_right = 5
