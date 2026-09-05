@@ -16,7 +16,7 @@ signal game_ended()
 
 const START_MUSIC := preload("res://assets/audio/music/music_kulluh_Pink_Shores_36.mp3")
 const GAME_MUSIC := preload("res://assets/audio/music/music_zapsplat_game_music_action_retro_8_bit_repeating_016.mp3")
-const SNOWBALL_SFX := preload("res://assets/audio/sfx/zapsplat_science_fiction_cannon_fire_85646.mp3")
+const SNOWBALL_SFX := preload("res://assets/audio/sfx/zapsplat_cartoon_swipe_grab_fast_swish_003_115127.mp3")
 const CLICK_SFX := preload("res://assets/audio/sfx/zapsplat_multimedia_beep_soft_click_button_87548.mp3")
 const IMPACT_SFX := preload("res://assets/audio/sfx/zapsplat_impacts_body_person_heavy_005_43768.mp3")
 
