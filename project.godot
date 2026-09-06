@@ -18,9 +18,9 @@ config/icon="uid://dok20bkn0htqj"
 
 [autoload]
 
+Settings="*uid://dxr53ebv2yjhi"
 Stats="*uid://b0tr2tsgluf72"
 Game="*uid://cc5nqv4x4qfyc"
-Settings="*uid://dxr53ebv2yjhi"
 
 [debug]
 

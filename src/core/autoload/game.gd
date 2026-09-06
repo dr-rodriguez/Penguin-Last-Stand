@@ -13,6 +13,7 @@ signal stats_refreshed()
 signal start_menu_requested()
 signal game_started()
 signal game_ended()
+signal options_menu_requested()
 
 const START_MUSIC := preload("res://assets/audio/music/music_kulluh_Pink_Shores_36.mp3")
 const GAME_MUSIC := preload("res://assets/audio/music/music_zapsplat_game_music_action_retro_8_bit_repeating_016.mp3")

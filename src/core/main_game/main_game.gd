@@ -1,7 +1,7 @@
 extends Node
 
 ## Which UI currently owns the pause, so two of them can't fight over it
-enum PauseSource { NONE, START, MENU, LEVEL_UP, GAME_END }
+enum PauseSource { NONE, START, MENU, LEVEL_UP, GAME_END, OPTIONS }
 
 @onready var enemy_pool: Pool = %EnemyPool
 @onready var snowball_pool: Pool = %SnowballPool
@@ -12,6 +12,7 @@ enum PauseSource { NONE, START, MENU, LEVEL_UP, GAME_END }
 @onready var game_timer: Timer = %GameTimer
 @onready var pause_menu: Control = %Pause
 @onready var start_menu: Control = %Start
+@onready var options_menu: Control = %Options
 @onready var score_menu: Control = %Score
 @onready var world_layer := %World
 @onready var hud_layer := %HudLayer
@@ -30,9 +31,6 @@ var music_current: AudioStreamPlayer
 
 
 func _ready() -> void:
-	# Check if the game is running on an Android or iOS device
-	Settings.is_mobile = OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios")
-	
 	# Show the start menu at game start, pauses the game
 	_show_start_menu()
 	
@@ -43,6 +41,7 @@ func _ready() -> void:
 	Game.game_started.connect(_start_game)
 	pause_menu.resume_requested.connect(_pause_for.bind(PauseSource.NONE))
 	Game.start_menu_requested.connect(_show_start_menu)
+	Game.options_menu_requested.connect(_show_options_menu)
 	Game.game_ended.connect(_show_game_over)
 
 	debug_layer.visible = Stats.debug_flag
@@ -85,6 +84,7 @@ func _pause_for(source: PauseSource) -> void:
 	start_menu.visible = source == PauseSource.START
 	pause_menu.visible = source == PauseSource.MENU
 	score_menu.visible = source == PauseSource.GAME_END
+	options_menu.visible = source == PauseSource.OPTIONS
 	# The joystick belongs to the gameplay loop only: no menu, no stick
 	_show_joystick(source == PauseSource.NONE)
 
@@ -113,6 +113,16 @@ func _show_start_menu() -> void:
 
 	# Pause until player action
 	_pause_for(PauseSource.START)
+
+
+## Show the options menu
+func _show_options_menu() -> void:
+	# Hide the world and hud
+	world_layer.visible = false
+	hud_layer.visible = false
+
+	# Pause until player action
+	_pause_for(PauseSource.OPTIONS)
 
 
 ## Show the game over screen
