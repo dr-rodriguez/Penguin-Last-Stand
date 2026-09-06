@@ -5,8 +5,7 @@ extends Control
 @onready var time_label: Label = %TimeLabel
 @onready var health_label: Label = %HealthLabel
 @onready var level_label: Label = %LevelLabel
-@onready var beaver_label: Label = %BeaverLabel
-@onready var axo_label: Label = %AxolotlLabel
+@onready var kill_list: HBoxContainer = %KillList
 
 
 func _ready() -> void:
@@ -29,8 +28,7 @@ func update_labels() -> void:
 	time_label.text = Game.format_time(Stats.MAX_TIME - Stats.time_elapsed)
 	health_label.text = Game.format_pair(Stats.current_player_health, Stats.player_health, 0)
 	level_label.text = str(Stats.player_level)
-	beaver_label.text = str(Stats.beaver_kills)
-	axo_label.text = str(Stats.axolotl_kills)
+	KillList.refresh(kill_list)
 	
 	Stats.calculate_score()
 	score_label.text = str(Stats.score)

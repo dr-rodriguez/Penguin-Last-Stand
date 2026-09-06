@@ -10,4 +10,7 @@ health = 8.0
 speed = 15.0
 damage = 2.0
 name = "Beaver"
+plural = "Beavers"
+score_value = 2
+spawn_weight = 0.35
 metadata/_custom_type_script = "uid://cihybvhpvn5ve"

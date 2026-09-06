@@ -9,8 +9,7 @@ signal resume_requested
 @onready var xp_label: Label = %XPLabel
 @onready var fire_rate_label: Label = %FireRateLabel
 @onready var damage_label: Label = %DamageLabel
-@onready var beaver_label: Label = %BeaverLabel
-@onready var axo_label: Label = %AxolotlLabel
+@onready var kill_list: HBoxContainer = %KillList
 
 
 func _ready() -> void:
@@ -29,8 +28,7 @@ func update_labels() -> void:
 	time_label.text = Game.format_time(Stats.MAX_TIME - Stats.time_elapsed)
 	health_label.text = Game.format_pair(Stats.current_player_health, Stats.player_health, 0)
 	level_label.text = str(Stats.player_level)
-	beaver_label.text = str(Stats.beaver_kills)
-	axo_label.text = str(Stats.axolotl_kills)
+	KillList.refresh(kill_list)
 	xp_label.text = Game.format_pair(Stats.player_xp, Stats.level_xp_needed, 0)
 	fire_rate_label.text = Game.format_stat(Stats.current_fire_interval, 2)
 	damage_label.text = Game.format_stat(Stats.current_bullet_damage, 1)

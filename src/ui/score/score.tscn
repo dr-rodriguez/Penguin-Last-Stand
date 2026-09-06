@@ -139,41 +139,9 @@ layout_mode = 2
 text = "Kills"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=1563329036]
-layout_mode = 2
-
-[node name="HBoxContainer4" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer" unique_id=2100734159]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="BeaverLabel2" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer/HBoxContainer4" unique_id=2142158997]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Beavers: "
-
-[node name="BeaverLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer/HBoxContainer4" unique_id=2080098225]
+[node name="KillList" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=1563329036]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 10
-text = "1"
-
-[node name="VSeparator" type="VSeparator" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer" unique_id=240226946]
-layout_mode = 2
-
-[node name="HBoxContainer5" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer" unique_id=264856592]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="AxolotlLabel2" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer/HBoxContainer5" unique_id=30971070]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Axolotl: "
-
-[node name="AxolotlLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/HBoxContainer/HBoxContainer5" unique_id=286457218]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 10
-text = "1"
 
 [node name="HSeparator3" type="HSeparator" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=1258234637]
 layout_mode = 2

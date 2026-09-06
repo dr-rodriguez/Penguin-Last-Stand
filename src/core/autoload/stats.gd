@@ -18,7 +18,6 @@ const DEFAULT_LEVEL_XP_NEEDED: float = 10.0
 const DEFAULT_FIRE_INTERVAL: float = 0.5
 const DEFAULT_BULLET_SPEED: float = 300.0
 const DEFAULT_BULLET_DAMAGE: float = 4.0
-const DEFAULT_ENEMY_TYPE_WEIGHT: float = 0.35
 const DEFAULT_ENEMY_SPAWN_TIME: float = 0.5
 #endregion
 
@@ -63,8 +62,6 @@ var bullet_damage: float = DEFAULT_BULLET_DAMAGE
 var current_bullet_damage: float = DEFAULT_BULLET_DAMAGE
 #endregion
 
-## Enemy type weight (below this value, second type shows up)
-var enemy_type_weight: float = DEFAULT_ENEMY_TYPE_WEIGHT
 ## Enemy spawn time (rate increases over time)
 var enemy_spawn_time: float = DEFAULT_ENEMY_SPAWN_TIME:
 	set(value):
@@ -81,9 +78,17 @@ var power_up_list: Array[PowerUp] = [
 ## Times each power-up has been taken this run, keyed by PowerUp.name
 var power_up_levels: Dictionary[StringName, int] = {}
 
+## List of enemy types that can spawn
+var enemy_list: Array[EnemyDef] = [
+	preload("res://src/resources/beaver.tres"),
+	preload("res://src/resources/axolotl.tres"),
+]
+
 # Game stats
-var beaver_kills: int = 0
-var axolotl_kills: int = 0
+## Kills this run, keyed by EnemyDef.name
+var kills: Dictionary[StringName, int] = {}
+## Running score from kills, so the tally never has to walk the enemy list
+var kill_score: int = 0
 ## Game time in seconds
 var time_elapsed: int = 0
 
@@ -112,14 +117,54 @@ func reset() -> void:
 	bullet_damage = DEFAULT_BULLET_DAMAGE
 	current_bullet_damage = DEFAULT_BULLET_DAMAGE
 
-	enemy_type_weight = DEFAULT_ENEMY_TYPE_WEIGHT
 	enemy_spawn_time = DEFAULT_ENEMY_SPAWN_TIME
 
 	power_up_levels.clear()
 
-	beaver_kills = 0
-	axolotl_kills = 0
+	# Seed every known type at zero so the readouts list them from the start
+	kills.clear()
+	for enemy_def: EnemyDef in enemy_list:
+		kills[StringName(enemy_def.name)] = 0
+	kill_score = 0
+
 	time_elapsed = 0
+
+
+## Record one kill and bank what it is worth
+func add_kill(enemy_def: EnemyDef) -> void:
+	var id := StringName(enemy_def.name)
+	kills[id] = kills.get(id, 0) + 1
+	kill_score += enemy_def.score_value
+
+
+## Kills recorded for one enemy type this run
+func kills_of(enemy_def: EnemyDef) -> int:
+	return kills.get(StringName(enemy_def.name), 0)
+
+
+## Pick an enemy type at random, biased by each type's spawn_weight
+func random_enemy_def() -> EnemyDef:
+	# Line the enemy types up, each taking a stretch as wide as its
+	# spawn_weight. Beaver 0.35 and Axolotl 0.65 lay out like this:
+	#
+	#   0.0        0.35                  1.0
+	#   |--Beaver--|-------Axolotl-------|
+	#
+	# Drop a random point on that line, return whoever's stretch it lands in.
+	var total: float = 0.0
+	for enemy_def: EnemyDef in enemy_list:
+		total += enemy_def.spawn_weight
+	var point: float = randf() * total
+	
+	# Walk left to right until the point falls short of the current right edge
+	var edge: float = 0.0
+	for enemy_def: EnemyDef in enemy_list:
+		edge += enemy_def.spawn_weight
+		if point < edge:
+			return enemy_def
+	
+	# Only reached if every weight is 0, which leaves no stretch to land in
+	return enemy_list.back()
 
 
 ## How many times a power-up has been taken this run
@@ -134,7 +179,7 @@ func is_power_up_capped(power_up: PowerUp) -> bool:
 
 ## Calculate the final score
 func calculate_score() -> void:
-	score = time_elapsed + beaver_kills * 2 + axolotl_kills \
+	score = time_elapsed + kill_score \
 	+ int(player_health - DEFAULT_PLAYER_HEALTH) \
 	+ int(current_player_health - DEFAULT_PLAYER_HEALTH) \
 	+ player_level * 5

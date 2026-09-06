@@ -10,10 +10,6 @@ extends Path2D
 # Can also access via get_parent() but if I move the spawner it may break
 # Should also be able to use %Player
 
-const BEAVER := preload("res://src/resources/beaver.tres")
-const AXOLOTL := preload("res://src/resources/axolotl.tres")
-
-
 func _ready() -> void:
 	# Connect signals
 	Game.enemy_defeated.connect(_on_enemy_defeated)
@@ -30,11 +26,7 @@ func _on_spawn_timer_timeout() -> void:
 	enemy.global_position = spawn_follow.global_position
 	
 	# Randomize enemy type (change enemy.enemy_def)
-	var spawn_weight := randf()
-	if spawn_weight <= Stats.enemy_type_weight:
-		enemy.enemy_def = BEAVER
-	else:
-		enemy.enemy_def = AXOLOTL
+	enemy.enemy_def = Stats.random_enemy_def()
 	
 	# Start enemy movement, pass player as target
 	enemy.launch(player)
@@ -45,11 +37,8 @@ func _on_spawn_timer_timeout() -> void:
 
 ## Release a defeated enemy
 func _on_enemy_defeated(enemy: Node) -> void:
-	# Count score
-	if enemy.enemy_def.name == "Axolotl":
-		Stats.axolotl_kills += 1
-	elif enemy.enemy_def.name == "Beaver":
-		Stats.beaver_kills += 1
+	# Count the kill against its own type
+	Stats.add_kill(enemy.enemy_def)
 	# Player XP is handled by Game autoload
 	
 	# Release enemy back to pool
