@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://enye5vtk8lwu"]
 
 [ext_resource type="PackedScene" uid="uid://c4vb3joi3rcuu" path="res://src/ui/card.tscn" id="1_6ow6c"]
+[ext_resource type="Theme" uid="uid://c3i1e2wloyui2" path="res://src/ui/ui_theme.tres" id="1_ddr4w"]
 [ext_resource type="Script" uid="uid://ve66du3uatqh" path="res://src/ui/levelup/levelup.gd" id="1_qflqd"]
 [ext_resource type="Script" uid="uid://bulq1r4uyoc1p" path="res://src/resources/power_up.gd" id="3_cdiai"]
 [ext_resource type="Texture2D" uid="uid://dok20bkn0htqj" path="res://assets/art/characters/player/penguin1.png" id="4_ddr4w"]
@@ -48,6 +49,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_ddr4w")
 script = ExtResource("1_qflqd")
 
 [node name="Panel" type="Panel" parent="." unique_id=732567083]
