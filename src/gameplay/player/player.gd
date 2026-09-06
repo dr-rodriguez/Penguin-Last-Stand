@@ -70,7 +70,6 @@ func _check_enemy_contact() -> void:
 			continue
 		
 		take_damage(body.damage)
-		#print("[Player] hit by %s @ %s hp=%s" % [body.get_instance_id(), body.global_position, body.health])
 		
 		# Reciprocal damage to enemy
 		# TODO: Decide if this should be bullet damage or some other value

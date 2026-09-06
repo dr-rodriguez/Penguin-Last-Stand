@@ -76,7 +76,8 @@ func _bake_noise() -> void:
 	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
 	noise.seed = randi()
 	noise.frequency = 0.02 # lower is smoother
-	noise.fractal_octaves = 3  # from docs: number of noise layers that are sampled to get the final value
+	# From the docs: number of noise layers that are sampled to get the final value
+	noise.fractal_octaves = 3
 
 	# Set up tile storage
 	_tiles.resize(PERIOD * PERIOD)

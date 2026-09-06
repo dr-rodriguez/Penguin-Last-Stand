@@ -1,6 +1,6 @@
 extends Control
 
-@onready var card_list: Array = [%Card1, %Card2, %Card3]
+@onready var card_list: Array[Control] = [%Card1, %Card2, %Card3]
 
 
 func _ready() -> void:

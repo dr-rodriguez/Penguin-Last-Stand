@@ -1,9 +1,5 @@
 extends Control
 
-func _ready() -> void:
-	pass
-
-
 
 ## Quit the game
 func _on_quit_button_pressed() -> void:

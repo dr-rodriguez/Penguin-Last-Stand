@@ -4,7 +4,8 @@ const RANGE: float = 300.
 
 var direction := Vector2.ZERO
 var travelled_distance: float = 0.0
-var speed: float = Stats.current_bullet_speed
+## Set from Stats by _reset() on every launch, not at script init
+var speed: float = 0.0
 ## Set once this snowball has spent itself, so it can only report done once
 var _spent: bool = false
 

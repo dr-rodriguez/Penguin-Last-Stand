@@ -190,8 +190,8 @@ func _start_game() -> void:
 
 ## Clear all objects in the pool (enemies, bullets)
 func _clear_pool(pool: Pool, pool_str: String) -> void:
-	var pool_nodes = get_tree().get_nodes_in_group(pool_str)
-	for n in pool_nodes:
+	var pool_nodes: Array[Node] = get_tree().get_nodes_in_group(pool_str)
+	for n: Node in pool_nodes:
 		pool.release(n)
 
 

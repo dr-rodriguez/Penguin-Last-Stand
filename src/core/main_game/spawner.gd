@@ -53,8 +53,8 @@ func _on_distant_player() -> void:
 	const THRESHOLD: float = 500.
 	
 	# Get all enemy nodes
-	var enemy_nodes = get_tree().get_nodes_in_group("Enemy")
-	for n in enemy_nodes:
+	var enemy_nodes: Array[Node] = get_tree().get_nodes_in_group("Enemy")
+	for n: Node in enemy_nodes:
 		# Don't process hidden enemy nodes
 		if n.visible == false:
 			continue
