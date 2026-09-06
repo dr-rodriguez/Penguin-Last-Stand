@@ -8,7 +8,7 @@ signal enemy_defeated(n: Node)
 signal player_hit()
 signal tick_elapsed()
 signal leveled_up()
-signal powerup_selected(power_up: PowerUp)
+signal power_up_selected(power_up: PowerUp)
 signal stats_refreshed()
 signal start_menu_requested()
 signal game_started()
@@ -38,7 +38,7 @@ func _ready() -> void:
 	tick_elapsed.connect(calculate_time_stats)
 	enemy_defeated.connect(_on_enemy_defeated)
 	leveled_up.connect(_on_leveled_up)
-	powerup_selected.connect(_on_powerup_selected)
+	power_up_selected.connect(_on_power_up_selected)
 
 
 ## Logic for any time calculations
@@ -107,7 +107,7 @@ func _check_game_end() -> void:
 
 #region Power Up Logic
 ## Handle power ups
-func _on_powerup_selected(power_up: PowerUp) -> void:
+func _on_power_up_selected(power_up: PowerUp) -> void:
 	# A level-up with nothing left to offer passes null; just resume the run
 	if power_up == null:
 		print("[Game] No power-up available")
@@ -155,7 +155,7 @@ func _apply_power_up(power_up: PowerUp) -> void:
 #region Formatting functions
 ## Formats a time in seconds as MM:SS (e.g. 900 -> "15:00")
 func format_time(seconds: int) -> String:
-	@warning_ignore("INTEGER_DIVISION") 
+	@warning_ignore("integer_division")
 	return "%02d:%02d" % [seconds / 60, seconds % 60]
 
 

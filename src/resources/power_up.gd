@@ -11,7 +11,7 @@ enum Mode {
 
 ## Unique id, and the key power-up levels are counted under
 @export var id: StringName
-## Texture to use for powerup
+## Texture to use for power_up
 @export var texture: Texture
 ## Title to use for card
 @export var title: String

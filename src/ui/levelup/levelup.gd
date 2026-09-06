@@ -5,7 +5,7 @@ extends Control
 
 func _ready() -> void:
 	Game.leveled_up.connect(show_options)
-	Game.powerup_selected.connect(_on_powerup_selected)
+	Game.power_up_selected.connect(_on_power_up_selected)
 
 
 ## Deal a fresh random power-up to each card, then reveal the screen
@@ -19,7 +19,7 @@ func show_options() -> void:
 	
 	# Everything is capped: nothing to offer, so don't hold the run hostage
 	if pool.is_empty():
-		Game.powerup_selected.emit(null)
+		Game.power_up_selected.emit(null)
 		return
 	
 	# Deal what's left; any spare card sits this level out
@@ -27,11 +27,11 @@ func show_options() -> void:
 		var has_offer: bool = i < pool.size()
 		card_list[i].visible = has_offer
 		if has_offer:
-			card_list[i].powerup = pool[i]
+			card_list[i].power_up = pool[i]
 	show()
 
 
-func _on_powerup_selected(_power_up: PowerUp) -> void:
+func _on_power_up_selected(_power_up: PowerUp) -> void:
 	# Play click sound
 	Game.button_click_sfx()
 	

@@ -16,14 +16,14 @@ var music_current: AudioStreamPlayer
 @onready var player: CharacterBody2D = %Player
 @onready var shoot_point: Marker2D = %ShootPoint
 @onready var shoot_timer: Timer = %ShootTimer
-@onready var debug_layer := $DebugLayer
+@onready var debug_layer: CanvasLayer = $DebugLayer
 @onready var game_timer: Timer = %GameTimer
 @onready var pause_menu: Control = %Pause
 @onready var start_menu: Control = %Start
 @onready var options_menu: Control = %Options
 @onready var score_menu: Control = %Score
-@onready var world_layer := %World
-@onready var hud_layer := %HudLayer
+@onready var world_layer: Node2D = %World
+@onready var hud_layer: CanvasLayer = %HudLayer
 @onready var music_player_a: AudioStreamPlayer = %MusicPlayerA
 @onready var music_player_b: AudioStreamPlayer = %MusicPlayerB
 @onready var sfx_player: AudioStreamPlayer = %SfxPlayer
@@ -37,7 +37,7 @@ func _ready() -> void:
 	# Connect signals
 	Game.snowball_done.connect(_on_snowball_done)
 	Game.leveled_up.connect(_pause_for.bind(PauseSource.LEVEL_UP))
-	Game.powerup_selected.connect(_on_powerup_selected)
+	Game.power_up_selected.connect(_on_power_up_selected)
 	Game.game_started.connect(_start_game)
 	pause_menu.resume_requested.connect(_pause_for.bind(PauseSource.NONE))
 	Game.start_menu_requested.connect(_show_start_menu)
@@ -123,7 +123,7 @@ func _pause_for(source: PauseSource) -> void:
 
 
 ## A power-up choice ends the level-up pause
-func _on_powerup_selected(_power_up: PowerUp) -> void:
+func _on_power_up_selected(_power_up: PowerUp) -> void:
 	_pause_for(PauseSource.NONE)
 
 

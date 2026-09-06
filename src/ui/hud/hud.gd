@@ -1,13 +1,14 @@
 extends Control
 
+## Live bar tweens, restarted rather than stacked
+var _xp_tween: Tween
+var _health_tween: Tween
+
 @onready var health_bar: ProgressBar = %HealthBar
 @onready var xp_bar: ProgressBar = %XpBar
 @onready var time_label: Label = %TimeLabel
 @onready var level_label: Label = %LevelLabel
 
-## Live bar tweens, restarted rather than stacked
-var _xp_tween: Tween
-var _health_tween: Tween
 
 func _ready() -> void:
 	health_bar.max_value = Stats.player_health

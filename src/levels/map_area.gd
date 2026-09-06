@@ -3,14 +3,9 @@ extends TileMapLayer
 # This script generates the map procedurally. 
 # We use PERIOD as the size of each tile and repeat it as the player moves through the world.
 
-## Player character scene
-@export var _player: CharacterBody2D
-## Water threshold
-@export var water_threshold: float = 0.2
-## Dirt threshold
-@export var dirt_threshold: float = 0.4
-## Grass threshold
-@export var grass_threshold: float = 0.85
+## Terrain possibilities
+enum Terrain {GRASS, DIRT, ROCK, WATER}
+# These are effectively ints, so Terrain.GRASS == 0
 
 ## Tiles per wrap
 const PERIOD: int = 128
@@ -23,9 +18,14 @@ const VARIANTS: int = 3
 ## Source ID for TileSet
 const SOURCE_ID: int = 0
 
-## Terrain possibilities
-enum Terrain {GRASS, DIRT, ROCK, WATER}
-# These are effectively ints, so Terrain.GRASS == 0
+## Player character scene
+@export var player: CharacterBody2D
+## Water threshold
+@export var water_threshold: float = 0.2
+## Dirt threshold
+@export var dirt_threshold: float = 0.4
+## Grass threshold
+@export var grass_threshold: float = 0.85
 
 ## Tile storage (noise values for the tile)
 var _tiles: PackedByteArray
@@ -51,7 +51,7 @@ func _ready() -> void:
 	var cell: Vector2i = _find_spawn()
 	while cell == Vector2i.ZERO:
 		cell = _find_spawn()
-	_player.global_position = to_global(map_to_local(cell))
+	player.global_position = to_global(map_to_local(cell))
 	
 	# Load chunks around player, unload those far away
 	_refresh(_player_chunk())
@@ -132,7 +132,7 @@ func _refresh(center: Vector2i) -> void:
 
 ## Determine which chunk the player is in
 func _player_chunk() -> Vector2i:
-	var cell := local_to_map(to_local(_player.global_position))
+	var cell := local_to_map(to_local(player.global_position))
 	return Vector2i(
 		floori(cell.x / float(CHUNK)), 
 		floori(cell.y / float(CHUNK))

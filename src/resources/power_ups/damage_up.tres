@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PowerUp" format=3 uid="uid://dj0orf72kllbc"]
 
-[ext_resource type="Script" uid="uid://bulq1r4uyoc1p" path="res://src/resources/powerup.gd" id="1_b3qac"]
+[ext_resource type="Script" uid="uid://bulq1r4uyoc1p" path="res://src/resources/power_up.gd" id="1_b3qac"]
 [ext_resource type="Texture2D" uid="uid://c7wy15jnh2vwa" path="res://assets/art/ui/icons/snowball2_powerup1.png" id="2_ysswx"]
 
 [resource]

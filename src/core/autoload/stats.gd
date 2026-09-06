@@ -70,9 +70,9 @@ var enemy_spawn_time: float = DEFAULT_ENEMY_SPAWN_TIME:
 
 ## List of available power ups
 var power_up_list: Array[PowerUp] = [
-	preload("res://src/resources/powerups/damage_up.tres"),
-	preload("res://src/resources/powerups/fire_rate.tres"),
-	preload("res://src/resources/powerups/health_boost.tres"),
+	preload("res://src/resources/power_ups/damage_up.tres"),
+	preload("res://src/resources/power_ups/fire_rate.tres"),
+	preload("res://src/resources/power_ups/health_boost.tres"),
 ]
 
 ## Times each power-up has been taken this run, keyed by PowerUp.id
