@@ -39,12 +39,6 @@ physics_layer_0/collision_layer = 16
 physics_layer_0/collision_mask = 0
 sources/0 = SubResource("TileSetAtlasSource_6yl8a")
 
-[sub_resource type="Curve2D" id="Curve2D_4ffcv"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, 8.498502, 103.35203, 0, 0, 0, 0, 170.3791, 101.545906, 0, 0, 0, 0, 171.33134, -82.678566, 0, 0, 0, 0, -153.3821, -84.48469, 0, 0, 0, 0, -153.3821, 100.642845, 0, 0, 0, 0, 7.5462627, 103.35203)
-}
-point_count = 6
-
 [node name="MainGame" type="Node" unique_id=1481109489]
 process_mode = 3
 script = ExtResource("1_n4iq1")
@@ -92,14 +86,9 @@ unique_name_in_owner = true
 position = Vector2(262, 153)
 
 [node name="Spawner" type="Path2D" parent="World/EntityRoot/Player" unique_id=2069571862]
-position = Vector2(-7.924759, -9.44632)
-scale = Vector2(1.0501567, 1.1073446)
-curve = SubResource("Curve2D_4ffcv")
 script = ExtResource("5_l0hoa")
 
 [node name="SpawnFollow" type="PathFollow2D" parent="World/EntityRoot/Player/Spawner" unique_id=1510105722]
-position = Vector2(8.498502, 103.35203)
-rotation = -0.0111566605
 
 [node name="SpawnTimer" type="Timer" parent="World/EntityRoot/Player/Spawner" unique_id=2055835520]
 autostart = true
@@ -108,6 +97,7 @@ autostart = true
 autostart = true
 
 [node name="Camera2D" type="Camera2D" parent="World/EntityRoot/Player" unique_id=2057989762]
+unique_name_in_owner = true
 zoom = Vector2(2, 2)
 
 [node name="ShootPoint" type="Marker2D" parent="World/EntityRoot/Player" unique_id=30899323]
@@ -148,14 +138,11 @@ layout_mode = 1
 
 [node name="VirtualJoystick" type="VirtualJoystick" parent="HudLayer/HudRoot" unique_id=621559734]
 unique_name_in_owner = true
-visible = false
 layout_mode = 0
 offset_left = 40.0
 offset_top = 285.0
 offset_right = 80.0
 offset_bottom = 325.0
-joystick_size = 80.0
-tip_size = 40.0
 action_left = &"move_left"
 action_right = &"move_right"
 action_up = &"move_up"
@@ -194,6 +181,7 @@ mouse_filter = 2
 
 [node name="Start" parent="TransitionLayer/TransitionRoot" unique_id=935905981 instance=ExtResource("12_llqnb")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 
 [node name="Score" parent="TransitionLayer/TransitionRoot" unique_id=62799 instance=ExtResource("13_e0ob3")]

@@ -10,3 +10,7 @@ plans/
 # Assets
 assets/audio/
 assets/art/ui/fonts/
+
+# Exports
+exports/
+export_presets.cfg
