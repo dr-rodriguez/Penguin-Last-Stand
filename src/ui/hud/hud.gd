@@ -66,3 +66,9 @@ func _on_enemy_defeated(_n: Node) -> void:
 func _on_leveled_up() -> void:
 	level_label.text = "Level: " + str(Stats.player_level)
 	_update_xp_bar()
+
+
+## The HUD only asks; main_game owns the pause flag
+func _on_pause_button_pressed() -> void:
+	Game.button_click_sfx()
+	Game.pause_requested.emit()

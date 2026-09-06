@@ -43,6 +43,7 @@ func _ready() -> void:
 	Game.start_menu_requested.connect(_show_start_menu)
 	Game.options_menu_requested.connect(_show_options_menu)
 	Game.game_ended.connect(_show_game_over)
+	Game.pause_requested.connect(_toggle_pause)
 
 	debug_layer.visible = Stats.is_debug
 
