@@ -5,6 +5,10 @@ extends Control
 @onready var time_label: Label = %TimeLabel
 @onready var level_label: Label = %LevelLabel
 
+## Live bar tweens, restarted rather than stacked
+var _xp_tween: Tween
+var _health_tween: Tween
+
 func _ready() -> void:
 	health_bar.max_value = Stats.player_health
 	health_bar.value = Stats.current_player_health
@@ -31,15 +35,23 @@ func _refresh_stats() -> void:
 
 
 func _update_xp_bar() -> void:
-	var tween := get_tree().create_tween().set_parallel()
-	tween.tween_property(xp_bar, "value", Stats.player_xp, 0.2)
-	tween.tween_property(xp_bar, "max_value", Stats.level_xp_needed, 0.2)
+	# Kills stack up fast: restart the fill instead of racing a second tween
+	if _xp_tween != null and _xp_tween.is_valid():
+		_xp_tween.kill()
+	
+	_xp_tween = create_tween().set_parallel()
+	_xp_tween.tween_property(xp_bar, "value", Stats.player_xp, 0.2)
+	_xp_tween.tween_property(xp_bar, "max_value", Stats.level_xp_needed, 0.2)
 
 
 func _on_player_hit() -> void:
-	var tween := get_tree().create_tween().set_parallel()
-	tween.tween_property(health_bar, "max_value", Stats.player_health, 0.2)
-	tween.tween_property(health_bar, "value", Stats.current_player_health, 0.2)
+	# Same for repeated hits while standing in a crowd
+	if _health_tween != null and _health_tween.is_valid():
+		_health_tween.kill()
+	
+	_health_tween = create_tween().set_parallel()
+	_health_tween.tween_property(health_bar, "max_value", Stats.player_health, 0.2)
+	_health_tween.tween_property(health_bar, "value", Stats.current_player_health, 0.2)
 
 
 func _on_game_tick() -> void:

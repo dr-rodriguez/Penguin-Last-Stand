@@ -5,6 +5,8 @@ const RANGE: float = 300.
 var direction := Vector2.ZERO
 var travelled_distance: float = 0.0
 var speed: float = Stats.current_bullet_speed
+## Set once this snowball has spent itself, so it can only report done once
+var _spent: bool = false
 
 
 ## Reset any properties between acquisitions
@@ -12,9 +14,14 @@ func _reset() -> void:
 	travelled_distance = 0.0
 	direction = Vector2.ZERO
 	speed = Stats.current_bullet_speed
+	_spent = false
 
 
 func _physics_process(delta: float) -> void:
+	# Already reported done this frame, waiting on the pool to take it back
+	if _spent:
+		return
+	
 	position += direction * speed * delta
 	
 	# Keep track of how far it has gone to release it
@@ -23,7 +30,7 @@ func _physics_process(delta: float) -> void:
 	# If travelled beyond range, emit so pool can release
 	# May also need to add logic for when it hits an enemy
 	if travelled_distance > RANGE:
-		Game.snowball_done.emit(self)
+		_finish()
 
 
 ## Reset and specify movement direction and speed
@@ -59,11 +66,20 @@ func _get_nearest_enemy() -> Node2D:
 
 ## Hit an enemy
 func _on_body_entered(body: Node2D) -> void:
+	# Overlaps are reported per body, so a crowd can fire this several times in
+	# one frame. Only the first one gets to spend the snowball.
+	if _spent:
+		return
+	
 	# Check if body hit is an enemy
 	if "Enemy" in body.get_groups():
 		#print("[Snowball] hit enemy " + str(body))
 		# Do damage to enemy
 		body.take_damage(Stats.current_bullet_damage)
-		Game.snowball_done.emit(self)
-	else:
-		return
+		_finish()
+
+
+## Spend the snowball and ask the pool to take it back
+func _finish() -> void:
+	_spent = true
+	Game.snowball_done.emit(self)
