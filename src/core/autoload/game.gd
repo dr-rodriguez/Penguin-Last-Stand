@@ -8,7 +8,7 @@ signal enemy_defeated(n: Node)
 signal player_hit()
 signal game_tick()
 signal level_up()
-signal powerup_selected(name: String)
+signal powerup_selected(power_up: PowerUp)
 signal stats_refreshed()
 signal start_menu_requested()
 signal game_started()
@@ -101,36 +101,48 @@ func _check_game_end() -> void:
 
 #region Power Up Logic
 ## Handle power ups
-func _on_powerup_selected(power_up_name: String) -> void:
-	print("[Game] Choose " + power_up_name)
+func _on_powerup_selected(power_up: PowerUp) -> void:
+	# A level-up with nothing left to offer passes null; just resume the run
+	if power_up == null:
+		print("[Game] No power-up available")
+		return
 	
-	# Use helper function depending on name
-	match power_up_name:
-		"HealthBoost":
-			_apply_health_boost()
-		"FireRateUp":
-			_apply_fire_rate_up()
-		"DamageUp":
-			_apply_damage_up()
+	print("[Game] Choose " + power_up.name)
+	
+	_apply_power_up(power_up)
 	# MainGame resumes the run now that the choice is made
 	
 	# Refresh stats, if needed
 	stats_refreshed.emit()
 
-## Increase maximum health
-func _apply_health_boost() -> void:
-	Stats.player_health += 10.
-	Stats.current_player_health += 10.
 
-## Increase fire rate
-func _apply_fire_rate_up() -> void:
-	Stats.current_fire_interval *= (1.0 - Stats.POWER_GROWTH)
-	Stats.fire_interval *= (1.0 - Stats.POWER_GROWTH)
-
-## Increase damage dealt
-func _apply_damage_up() -> void:
-	Stats.current_bullet_damage += 1
-	Stats.bullet_damage += 1.0
+## Fold a power-up's effect into the stat it names, plus that stat's live twin
+func _apply_power_up(power_up: PowerUp) -> void:
+	var base_name: StringName = power_up.stat
+	if base_name == &"":
+		push_warning("[Game] %s has no stat set" % power_up.name)
+		return
+	
+	# Every tunable stat is a base/current pair, e.g. fire_interval and
+	# current_fire_interval. The base moves first: current clamps against it.
+	var current_name := StringName("current_" + base_name)
+	var base_value: float = Stats.get(base_name)
+	var current_value: float = Stats.get(current_name)
+	
+	match power_up.mode:
+		PowerUp.Mode.ADD:
+			base_value += power_up.amount
+			current_value += power_up.amount
+		PowerUp.Mode.MULTIPLY:
+			base_value *= power_up.amount
+			current_value *= power_up.amount
+	
+	Stats.set(base_name, base_value)
+	Stats.set(current_name, current_value)
+	
+	# Count the pick so capped power-ups stop being offered
+	var id := StringName(power_up.name)
+	Stats.power_up_levels[id] = Stats.power_up_levels.get(id, 0) + 1
 
 #endregion
 

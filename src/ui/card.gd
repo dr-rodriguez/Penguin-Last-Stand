@@ -27,5 +27,7 @@ func _refresh() -> void:
 
 
 func _on_button_pressed() -> void:
-	# Send a signal with the name of the selected power-up
-	Game.powerup_selected.emit(powerup.name)
+	# Send a signal with the selected power-up itself
+	if powerup == null:
+		return
+	Game.powerup_selected.emit(powerup)

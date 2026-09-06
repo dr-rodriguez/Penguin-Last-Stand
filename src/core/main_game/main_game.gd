@@ -90,7 +90,7 @@ func _pause_for(source: PauseSource) -> void:
 
 
 ## A power-up choice ends the level-up pause
-func _on_powerup_selected(_power_up_name: String) -> void:
+func _on_powerup_selected(_power_up: PowerUp) -> void:
 	_pause_for(PauseSource.NONE)
 
 

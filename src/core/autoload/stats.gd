@@ -7,8 +7,6 @@ extends Node
 const GROWTH: float = 0.15
 ## Maximum time to count down from
 const MAX_TIME: int = 300
-## Growth rate of power ups
-const POWER_GROWTH: float = 0.1
 ## Difficulty increase timer
 const DIFFICULTY_TIMER: int = 30
 ## Minimum possible enemy spawn time
@@ -74,11 +72,14 @@ var enemy_spawn_time: float = DEFAULT_ENEMY_SPAWN_TIME:
 		enemy_spawn_time = clampf(value, MINIMUM_ENEMY_SPAWN_TIME, DEFAULT_ENEMY_SPAWN_TIME)
 
 ## List of available power ups
-var power_up_list := [
+var power_up_list: Array[PowerUp] = [
 	preload("res://src/resources/powerups/damage_up.tres"),
 	preload("res://src/resources/powerups/fire_rate.tres"),
 	preload("res://src/resources/powerups/health_boost.tres"),
 ]
+
+## Times each power-up has been taken this run, keyed by PowerUp.name
+var power_up_levels: Dictionary[StringName, int] = {}
 
 # Game stats
 var beaver_kills: int = 0
@@ -114,9 +115,21 @@ func reset() -> void:
 	enemy_type_weight = DEFAULT_ENEMY_TYPE_WEIGHT
 	enemy_spawn_time = DEFAULT_ENEMY_SPAWN_TIME
 
+	power_up_levels.clear()
+
 	beaver_kills = 0
 	axolotl_kills = 0
 	time_elapsed = 0
+
+
+## How many times a power-up has been taken this run
+func power_up_level(power_up: PowerUp) -> int:
+	return power_up_levels.get(StringName(power_up.name), 0)
+
+
+## True once a power-up has hit its max_level (max_level 0 means never)
+func is_power_up_capped(power_up: PowerUp) -> bool:
+	return power_up.max_level > 0 and power_up_level(power_up) >= power_up.max_level
 
 
 ## Calculate the final score
