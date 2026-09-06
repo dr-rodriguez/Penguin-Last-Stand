@@ -27,13 +27,11 @@ var pause_source: PauseSource = PauseSource.NONE
 var music_tween: Tween
 ## The player that owns the audible track; the other one is free to fade in
 var music_current: AudioStreamPlayer
-## Flag whether the player is in a mobile device
-var is_mobile: bool = false
 
 
 func _ready() -> void:
 	# Check if the game is running on an Android or iOS device
-	is_mobile = OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios")
+	Settings.is_mobile = OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios")
 	
 	# Show the start menu at game start, pauses the game
 	_show_start_menu()
@@ -61,13 +59,15 @@ func _process(_delta: float) -> void:
 		return
 
 	# Continuously shoot (_input only fires per event)
-	if Input.is_action_pressed("shoot") and not on_cooldown:
+	if Input.is_action_pressed("shoot") and not on_cooldown and not Settings.auto_shoot:
+		_fire_snowball()
+	elif Settings.auto_shoot and not on_cooldown:
 		_fire_snowball()
 
 
 ## Toggle the joystick on/off if mobile
 func _show_joystick(visible_on: bool = false) -> void:
-	joystick_node.visible = is_mobile and visible_on
+	joystick_node.visible = Settings.is_mobile and visible_on
 
 
 ## Flip the pause menu on and off
@@ -191,6 +191,12 @@ func _fire_snowball() -> void:
 	var snowball: Node = snowball_pool.acquire()
 	if snowball == null:
 		return
+	
+	# If auto-shooting, exit early if no enemies are present
+	var enemy_nodes = get_tree().get_nodes_in_group("Enemy")
+	if len(enemy_nodes) <= 0:
+		return
+	
 	snowball.global_position = shoot_point.global_position
 	snowball.launch()
 	
@@ -204,7 +210,6 @@ func _fire_snowball() -> void:
 
 ## Release a spent snowball (out of range or hit target)
 func _on_snowball_done(snowball: Node) -> void:
-	#print("[Main] " + str(object) + " released")
 	snowball_pool.release(snowball)
 
 

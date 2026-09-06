@@ -31,10 +31,31 @@ func launch() -> void:
 	# Reset properties
 	_reset()
 	
-	var mouse_pos: Vector2 = get_global_mouse_position()
-	direction = (mouse_pos - global_position).normalized()
+	var target_pos: Vector2 = get_global_mouse_position()
+	
+	# If auto_shooting, use the nearest enemy, not the mouse position
+	if Settings.auto_shoot:
+		# Get enemies and choot the closest
+		var nearest: Node2D = _get_nearest_enemy()
+		if nearest != null:
+			target_pos = nearest.global_position
+
+	direction = (target_pos - global_position).normalized()
 	speed = Stats.current_bullet_speed
 
+
+## Closest live enemy in range, or null
+func _get_nearest_enemy() -> Node2D:
+	var nearest: Node2D = null
+	var nearest_dist_sq: float = RANGE * RANGE
+	
+	for enemy in get_tree().get_nodes_in_group("Enemy"):
+		var dist_sq: float = global_position.distance_squared_to(enemy.global_position)
+		if dist_sq < nearest_dist_sq:
+			nearest_dist_sq = dist_sq
+			nearest = enemy
+	
+	return nearest
 
 ## Hit an enemy
 func _on_body_entered(body: Node2D) -> void:
