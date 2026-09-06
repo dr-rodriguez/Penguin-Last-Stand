@@ -15,12 +15,17 @@ var damage: float
 var target: Node2D = null
 ## Active flag
 var active: bool = false
+## Live hit-flash tween, killed before the node goes back to the pool
+var flash_tween: Tween
 
 
 ## Reset any properties between acquisitions
 func _reset() -> void:
 	# Re-enable collision after being released back to the pool
 	collision_shape.set_deferred("disabled", false)
+	
+	# Drop any flash left over from the previous life
+	_kill_flash()
 
 	# Safeguard against not having enemy_def set
 	if enemy_def == null:
@@ -76,10 +81,15 @@ func take_damage(value: float) -> void:
 ## Damage FX indicator
 func damage_fx() -> void:
 	var hit_time: float = 0.2
-	var tween = get_tree().create_tween()
+	
+	# Restart the flash instead of stacking a second one on top
+	_kill_flash()
+	
+	# Node-bound so the tween dies with the enemy, not with the scene tree
+	flash_tween = create_tween()
 	# Flash red when hit
-	tween.tween_property(sprite, "modulate", Color.RED, hit_time)
-	tween.tween_property(sprite, "modulate", Color.WHITE, hit_time)
+	flash_tween.tween_property(sprite, "modulate", Color.RED, hit_time)
+	flash_tween.tween_property(sprite, "modulate", Color.WHITE, hit_time)
 
 
 ## Remove enemy node
@@ -87,6 +97,17 @@ func remove_enemy() -> void:
 	# Stop being hittable/touchable while idle in the pool
 	active = false
 	collision_shape.set_deferred("disabled", true)
+	
+	# A pooled node never frees, so the flash has to be stopped by hand
+	_kill_flash()
+	sprite.modulate = Color.WHITE
 
 	# Emit signal so we can call release
 	Game.enemy_defeated.emit(self)
+
+
+## Stop any running hit-flash so it can't write to a reused sprite
+func _kill_flash() -> void:
+	if flash_tween != null and flash_tween.is_valid():
+		flash_tween.kill()
+	flash_tween = null

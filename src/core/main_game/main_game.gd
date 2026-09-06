@@ -64,9 +64,9 @@ func _process(_delta: float) -> void:
 		_fire_snowball()
 
 
-## Toggle the joystick on/off if mobile
+## Toggle the joystick on/off if the player has it enabled
 func _show_joystick(visible_on: bool = false) -> void:
-	joystick_node.visible = Settings.is_mobile and visible_on
+	joystick_node.visible = Settings.joystick_enabled and visible_on
 
 
 ## Flip the pause menu on and off
@@ -197,14 +197,14 @@ func _clear_pool(pool: Pool, pool_str: String) -> void:
 
 ## Acquire snowball from pool
 func _fire_snowball() -> void:
+	# Nothing to shoot at: bail out before taking a node out of the pool
+	var enemy_nodes: Array[Node] = get_tree().get_nodes_in_group("Enemy")
+	if enemy_nodes.is_empty():
+		return
+	
 	# Get the scene and call it's launch method
 	var snowball: Node = snowball_pool.acquire()
 	if snowball == null:
-		return
-	
-	# If auto-shooting, exit early if no enemies are present
-	var enemy_nodes = get_tree().get_nodes_in_group("Enemy")
-	if len(enemy_nodes) <= 0:
 		return
 	
 	snowball.global_position = shoot_point.global_position

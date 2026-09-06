@@ -5,7 +5,7 @@ extends Control
 
 func _ready() -> void:
 	shoot_button.button_pressed = Settings.auto_shoot
-	joystick_button.button_pressed = Settings.is_mobile
+	joystick_button.button_pressed = Settings.joystick_enabled
 
 
 ## Go back to start menu
@@ -21,4 +21,4 @@ func _on_auto_shoot_button_toggled(toggled_on: bool) -> void:
 
 func _on_joytstick_button_toggled(toggled_on: bool) -> void:
 	Game.button_click_sfx()
-	Settings.is_mobile = toggled_on
+	Settings.joystick_enabled = toggled_on
