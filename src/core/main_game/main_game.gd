@@ -100,7 +100,25 @@ func play_music_track(track: AudioStream) -> void:
 
 ## Toggle the joystick on/off if the player has it enabled
 func _show_joystick(visible_on: bool = false) -> void:
-	joystick_node.visible = Settings.joystick_enabled and visible_on
+	var show_stick: bool = Settings.joystick_enabled and visible_on
+	# Hiding mid-drag cuts the stick off from the touch release, so its actions
+	# would stay latched down and the player would keep walking after the menu
+	if joystick_node.visible and not show_stick:
+		_release_joystick_actions()
+	joystick_node.visible = show_stick
+
+
+## Force every action the joystick drives back to "not pressed"
+func _release_joystick_actions() -> void:
+	var actions: Array[StringName] = [
+		joystick_node.action_left,
+		joystick_node.action_right,
+		joystick_node.action_up,
+		joystick_node.action_down,
+	]
+	for action: StringName in actions:
+		if not action.is_empty() and InputMap.has_action(action):
+			Input.action_release(action)
 
 
 ## Flip the pause menu on and off
