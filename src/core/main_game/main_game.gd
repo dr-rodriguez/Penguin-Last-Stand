@@ -18,6 +18,7 @@ enum PauseSource { NONE, START, MENU, LEVEL_UP, GAME_END }
 @onready var music_player_a: AudioStreamPlayer = %MusicPlayerA
 @onready var music_player_b: AudioStreamPlayer = %MusicPlayerB
 @onready var sfx_player: AudioStreamPlayer = %SfxPlayer
+@onready var joystick_node: VirtualJoystick = %VirtualJoystick
 
 const MUSIC_FADE: float = 0.8
 
@@ -26,9 +27,14 @@ var pause_source: PauseSource = PauseSource.NONE
 var music_tween: Tween
 ## The player that owns the audible track; the other one is free to fade in
 var music_current: AudioStreamPlayer
+## Flag whether the player is in a mobile device
+var is_mobile: bool = false
 
 
 func _ready() -> void:
+	# Check if the game is running on an Android or iOS device
+	is_mobile = OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios")
+	
 	# Show the start menu at game start, pauses the game
 	_show_start_menu()
 	
@@ -59,6 +65,11 @@ func _process(_delta: float) -> void:
 		_fire_snowball()
 
 
+## Toggle the joystick on/off if mobile
+func _show_joystick(visible_on: bool = false) -> void:
+	joystick_node.visible = is_mobile and visible_on
+
+
 ## Flip the pause menu on and off
 func _toggle_pause() -> void:
 	# The level-up screen owns the screen while it's up, leave it alone
@@ -74,6 +85,8 @@ func _pause_for(source: PauseSource) -> void:
 	start_menu.visible = source == PauseSource.START
 	pause_menu.visible = source == PauseSource.MENU
 	score_menu.visible = source == PauseSource.GAME_END
+	# The joystick belongs to the gameplay loop only: no menu, no stick
+	_show_joystick(source == PauseSource.NONE)
 
 
 ## A power-up choice ends the level-up pause
@@ -97,7 +110,7 @@ func _show_start_menu() -> void:
 	# Hide the world and hud
 	world_layer.visible = false
 	hud_layer.visible = false
-	
+
 	# Pause until player action
 	_pause_for(PauseSource.START)
 
@@ -113,7 +126,7 @@ func _show_game_over() -> void:
 	
 	# Hide the hud
 	hud_layer.visible = false
-	
+
 	# Pause until player action
 	_pause_for(PauseSource.GAME_END)
 
@@ -127,7 +140,7 @@ func _start_game() -> void:
 	# Show the world and hud
 	world_layer.visible = true
 	hud_layer.visible = true
-	
+
 	# Game music
 	play_music_track(Game.GAME_MUSIC)
 

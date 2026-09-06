@@ -29,7 +29,7 @@ func _ready() -> void:
 	sfx_player = AudioStreamPlayer.new()
 	sfx_player.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(sfx_player)
-
+	
 	Stats.reset()
 	print("[Game] ready")
 	

@@ -145,6 +145,21 @@ process_mode = 2
 visible = false
 layout_mode = 1
 
+[node name="VirtualJoystick" type="VirtualJoystick" parent="HudLayer/HudRoot" unique_id=621559734]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 40.0
+offset_top = 285.0
+offset_right = 80.0
+offset_bottom = 325.0
+joystick_size = 80.0
+tip_size = 40.0
+action_left = &"move_left"
+action_right = &"move_right"
+action_up = &"move_up"
+action_down = &"move_down"
+
 [node name="PauseLayer" type="CanvasLayer" parent="." unique_id=1679763196]
 process_mode = 2
 layer = 20
