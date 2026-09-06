@@ -6,4 +6,4 @@ func _ready() -> void:
 	
 
 func _on_button_pressed() -> void:
-	Game.level_up.emit()
+	Game.leveled_up.emit()

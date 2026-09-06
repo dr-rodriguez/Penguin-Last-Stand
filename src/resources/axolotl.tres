@@ -7,7 +7,7 @@
 script = ExtResource("1_082pe")
 texture = ExtResource("2_082pe")
 speed = 20.0
-name = "Axolotl"
+id = &"Axolotl"
 plural = "Axolotls"
 score_value = 1
 spawn_weight = 0.65

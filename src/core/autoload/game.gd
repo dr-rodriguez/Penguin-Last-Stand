@@ -6,8 +6,8 @@ extends Node
 signal snowball_done(n: Node)
 signal enemy_defeated(n: Node)
 signal player_hit()
-signal game_tick()
-signal level_up()
+signal tick_elapsed()
+signal leveled_up()
 signal powerup_selected(power_up: PowerUp)
 signal stats_refreshed()
 signal start_menu_requested()
@@ -35,9 +35,9 @@ func _ready() -> void:
 	print("[Game] ready")
 	
 	# Signal connnections
-	game_tick.connect(calculate_time_stats)
+	tick_elapsed.connect(calculate_time_stats)
 	enemy_defeated.connect(_on_enemy_defeated)
-	level_up.connect(_on_level_up)
+	leveled_up.connect(_on_leveled_up)
 	powerup_selected.connect(_on_powerup_selected)
 
 
@@ -65,7 +65,7 @@ func _on_enemy_defeated(_n: Node) -> void:
 	
 	# Level up logic
 	if Stats.player_xp >= Stats.level_xp_needed:
-		level_up.emit()
+		leveled_up.emit()
 
 
 ## Increase the difficulty
@@ -75,7 +75,7 @@ func _increase_difficulty() -> void:
 
 
 ## Handle level ups
-func _on_level_up() -> void:
+func _on_leveled_up() -> void:
 	# Reset current XP amount
 	Stats.player_xp = 0
 	Stats.level_xp_needed *= (1.0 + Stats.GROWTH)
@@ -92,12 +92,12 @@ func _on_level_up() -> void:
 func _check_game_end() -> void:
 	# Player reached the end of the timer
 	if Stats.time_elapsed >= Stats.MAX_TIME:
-		Stats.victory_flag = true
+		Stats.is_victory = true
 		game_ended.emit()
 		return
 	# Player lost
 	elif Stats.current_player_health <= 0:
-		Stats.victory_flag = false
+		Stats.is_victory = false
 		game_ended.emit()
 		return
 	# No action, continue the game
@@ -113,7 +113,7 @@ func _on_powerup_selected(power_up: PowerUp) -> void:
 		print("[Game] No power-up available")
 		return
 	
-	print("[Game] Choose " + power_up.name)
+	print("[Game] Choose " + power_up.id)
 	
 	_apply_power_up(power_up)
 	# MainGame resumes the run now that the choice is made
@@ -126,7 +126,7 @@ func _on_powerup_selected(power_up: PowerUp) -> void:
 func _apply_power_up(power_up: PowerUp) -> void:
 	var base_name: StringName = power_up.stat
 	if base_name == &"":
-		push_warning("[Game] %s has no stat set" % power_up.name)
+		push_warning("[Game] %s has no stat set" % power_up.id)
 		return
 	
 	# Every tunable stat is a base/current pair, e.g. fire_interval and
@@ -147,8 +147,7 @@ func _apply_power_up(power_up: PowerUp) -> void:
 	Stats.set(current_name, current_value)
 	
 	# Count the pick so capped power-ups stop being offered
-	var id := StringName(power_up.name)
-	Stats.power_up_levels[id] = Stats.power_up_levels.get(id, 0) + 1
+	Stats.power_up_levels[power_up.id] = Stats.power_up_levels.get(power_up.id, 0) + 1
 
 #endregion
 

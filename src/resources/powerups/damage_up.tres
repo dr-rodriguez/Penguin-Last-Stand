@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("1_b3qac")
-name = "DamageUp"
+id = &"DamageUp"
 texture = ExtResource("2_ysswx")
 title = "Damage Boost"
 description = "Boost the damage of your snowballs."

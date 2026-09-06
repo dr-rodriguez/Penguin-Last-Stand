@@ -20,7 +20,7 @@ func _on_visibility_changed() -> void:
 
 
 func update_labels() -> void:
-	if Stats.victory_flag:
+	if Stats.is_victory:
 		title_label.text = "Game Over: Victory!"
 	else:
 		title_label.text = "Game Over: Defeat!"

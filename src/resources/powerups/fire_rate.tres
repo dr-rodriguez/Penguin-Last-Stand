@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("1_33was")
-name = "FireRateUp"
+id = &"FireRateUp"
 texture = ExtResource("2_82w5x")
 title = "Snowball Speed"
 description = "Increase rate of throwing snowballs."

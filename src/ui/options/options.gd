@@ -1,7 +1,7 @@
 extends Control
 
 @onready var shoot_button: CheckButton = %AutoShootButton
-@onready var joystick_button: CheckButton = %JoytstickButton
+@onready var joystick_button: CheckButton = %JoystickButton
 
 func _ready() -> void:
 	shoot_button.button_pressed = Settings.auto_shoot
@@ -19,6 +19,6 @@ func _on_auto_shoot_button_toggled(toggled_on: bool) -> void:
 	Settings.auto_shoot = toggled_on
 
 
-func _on_joytstick_button_toggled(toggled_on: bool) -> void:
+func _on_joystick_button_toggled(toggled_on: bool) -> void:
 	Game.button_click_sfx()
 	Settings.joystick_enabled = toggled_on

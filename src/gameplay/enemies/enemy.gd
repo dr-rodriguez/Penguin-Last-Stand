@@ -11,9 +11,9 @@ var damage: float
 ## Target to move towards
 var target: Node2D = null
 ## Active flag
-var active: bool = false
+var is_active: bool = false
 ## Live hit-flash tween, killed before the node goes back to the pool
-var flash_tween: Tween
+var _flash_tween: Tween
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
@@ -26,7 +26,7 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	# Safeguard against not being active
-	if not active or target == null:
+	if not is_active or target == null:
 		return
 	
 	# Get direction and velocity towards player, then move towards them
@@ -43,7 +43,7 @@ func launch(new_target: Node2D) -> void:
 	# Reset properties
 	_reset()
 	target = new_target
-	active = true
+	is_active = true
 
 
 ## Take damage
@@ -65,16 +65,16 @@ func damage_fx() -> void:
 	_kill_flash()
 	
 	# Node-bound so the tween dies with the enemy, not with the scene tree
-	flash_tween = create_tween()
+	_flash_tween = create_tween()
 	# Flash red when hit
-	flash_tween.tween_property(sprite, "modulate", Color.RED, hit_time)
-	flash_tween.tween_property(sprite, "modulate", Color.WHITE, hit_time)
+	_flash_tween.tween_property(sprite, "modulate", Color.RED, hit_time)
+	_flash_tween.tween_property(sprite, "modulate", Color.WHITE, hit_time)
 
 
 ## Remove enemy node
 func remove_enemy() -> void:
 	# Stop being hittable/touchable while idle in the pool
-	active = false
+	is_active = false
 	collision_shape.set_deferred("disabled", true)
 	
 	# A pooled node never frees, so the flash has to be stopped by hand
@@ -108,6 +108,6 @@ func _reset() -> void:
 
 ## Stop any running hit-flash so it can't write to a reused sprite
 func _kill_flash() -> void:
-	if flash_tween != null and flash_tween.is_valid():
-		flash_tween.kill()
-	flash_tween = null
+	if _flash_tween != null and _flash_tween.is_valid():
+		_flash_tween.kill()
+	_flash_tween = null

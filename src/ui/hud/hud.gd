@@ -17,9 +17,9 @@ func _ready() -> void:
 	
 	# Signals
 	Game.player_hit.connect(_on_player_hit)
-	Game.game_tick.connect(_on_game_tick)
+	Game.tick_elapsed.connect(_on_tick_elapsed)
 	Game.enemy_defeated.connect(_on_enemy_defeated)
-	Game.level_up.connect(_on_level_up)
+	Game.leveled_up.connect(_on_leveled_up)
 	Game.stats_refreshed.connect(_refresh_stats)
 	
 	time_label.text = Game.format_time(Stats.MAX_TIME)
@@ -30,8 +30,8 @@ func _refresh_stats() -> void:
 	_update_xp_bar()
 	_on_player_hit()
 	_on_enemy_defeated(null)
-	_on_game_tick()
-	_on_level_up()
+	_on_tick_elapsed()
+	_on_leveled_up()
 
 
 func _update_xp_bar() -> void:
@@ -54,7 +54,7 @@ func _on_player_hit() -> void:
 	_health_tween.tween_property(health_bar, "value", Stats.current_player_health, 0.2)
 
 
-func _on_game_tick() -> void:
+func _on_tick_elapsed() -> void:
 	time_label.text = Game.format_time(Stats.MAX_TIME - Stats.time_elapsed)
 
 
@@ -62,6 +62,6 @@ func _on_enemy_defeated(_n: Node) -> void:
 	_update_xp_bar()
 
 
-func _on_level_up() -> void:
+func _on_leveled_up() -> void:
 	level_label.text = "Level: " + str(Stats.player_level)
 	_update_xp_bar()

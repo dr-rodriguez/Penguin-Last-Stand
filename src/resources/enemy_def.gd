@@ -7,7 +7,8 @@ extends Resource
 @export var health: float = 5.0
 @export var speed: float = 10.0
 @export var damage: float = 1.0
-@export var name: String
+## Unique id, and the key kills are counted under
+@export var id: StringName
 ## Plural form used in the kill readouts
 @export var plural: String
 ## Points one kill is worth in the final score

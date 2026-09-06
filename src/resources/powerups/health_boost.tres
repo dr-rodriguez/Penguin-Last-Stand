@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("1_ik40g")
-name = "HealthBoost"
+id = &"HealthBoost"
 texture = ExtResource("2_iptps")
 title = "Max Health Up"
 description = "Increase maximum health."

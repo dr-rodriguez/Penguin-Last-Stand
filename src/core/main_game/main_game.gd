@@ -5,7 +5,7 @@ enum PauseSource { NONE, START, MENU, LEVEL_UP, GAME_END, OPTIONS }
 
 const MUSIC_FADE: float = 0.8
 
-var on_cooldown: bool = false
+var is_on_cooldown: bool = false
 var pause_source: PauseSource = PauseSource.NONE
 var music_tween: Tween
 ## The player that owns the audible track; the other one is free to fade in
@@ -36,7 +36,7 @@ func _ready() -> void:
 	
 	# Connect signals
 	Game.snowball_done.connect(_on_snowball_done)
-	Game.level_up.connect(_pause_for.bind(PauseSource.LEVEL_UP))
+	Game.leveled_up.connect(_pause_for.bind(PauseSource.LEVEL_UP))
 	Game.powerup_selected.connect(_on_powerup_selected)
 	Game.game_started.connect(_start_game)
 	pause_menu.resume_requested.connect(_pause_for.bind(PauseSource.NONE))
@@ -44,7 +44,7 @@ func _ready() -> void:
 	Game.options_menu_requested.connect(_show_options_menu)
 	Game.game_ended.connect(_show_game_over)
 
-	debug_layer.visible = Stats.debug_flag
+	debug_layer.visible = Stats.is_debug
 
 
 func _process(_delta: float) -> void:
@@ -58,9 +58,9 @@ func _process(_delta: float) -> void:
 		return
 
 	# Continuously shoot (_input only fires per event)
-	if Input.is_action_pressed("shoot") and not on_cooldown and not Settings.auto_shoot:
+	if Input.is_action_pressed("shoot") and not is_on_cooldown and not Settings.auto_shoot:
 		_fire_snowball()
-	elif Settings.auto_shoot and not on_cooldown:
+	elif Settings.auto_shoot and not is_on_cooldown:
 		_fire_snowball()
 
 
@@ -215,7 +215,7 @@ func _fire_snowball() -> void:
 	
 	# Start the timer
 	shoot_timer.start(Stats.current_fire_interval)
-	on_cooldown = true
+	is_on_cooldown = true
 
 
 ## Release a spent snowball (out of range or hit target)
@@ -224,9 +224,9 @@ func _on_snowball_done(snowball: Node) -> void:
 
 
 func _on_shoot_timer_timeout() -> void:
-	on_cooldown = false
+	is_on_cooldown = false
 
 
 ## Every second, emit a game tick
 func _on_game_timer_timeout() -> void:
-	Game.game_tick.emit()
+	Game.tick_elapsed.emit()

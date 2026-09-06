@@ -43,7 +43,7 @@ var level_xp_needed: float = DEFAULT_LEVEL_XP_NEEDED
 ## Score value
 var score: int = 0
 ## Game won/lost flag
-var victory_flag: bool = false
+var is_victory: bool = false
 #endregion
 
 #region Player combat attributes
@@ -75,7 +75,7 @@ var power_up_list: Array[PowerUp] = [
 	preload("res://src/resources/powerups/health_boost.tres"),
 ]
 
-## Times each power-up has been taken this run, keyed by PowerUp.name
+## Times each power-up has been taken this run, keyed by PowerUp.id
 var power_up_levels: Dictionary[StringName, int] = {}
 
 ## List of enemy types that can spawn
@@ -85,14 +85,14 @@ var enemy_list: Array[EnemyDef] = [
 ]
 
 # Game stats
-## Kills this run, keyed by EnemyDef.name
+## Kills this run, keyed by EnemyDef.id
 var kills: Dictionary[StringName, int] = {}
 ## Running score from kills, so the tally never has to walk the enemy list
 var kill_score: int = 0
 ## Game time in seconds
 var time_elapsed: int = 0
 
-var debug_flag: bool = false
+var is_debug: bool = false
 
 
 func _ready() -> void:
@@ -103,7 +103,7 @@ func _ready() -> void:
 func reset() -> void:
 	player_xp = 0.0
 	score = 0
-	victory_flag = false
+	is_victory = false
 	player_level = 1
 	level_xp_needed = DEFAULT_LEVEL_XP_NEEDED
 
@@ -124,7 +124,7 @@ func reset() -> void:
 	# Seed every known type at zero so the readouts list them from the start
 	kills.clear()
 	for enemy_def: EnemyDef in enemy_list:
-		kills[StringName(enemy_def.name)] = 0
+		kills[enemy_def.id] = 0
 	kill_score = 0
 
 	time_elapsed = 0
@@ -132,14 +132,13 @@ func reset() -> void:
 
 ## Record one kill and bank what it is worth
 func add_kill(enemy_def: EnemyDef) -> void:
-	var id := StringName(enemy_def.name)
-	kills[id] = kills.get(id, 0) + 1
+	kills[enemy_def.id] = kills.get(enemy_def.id, 0) + 1
 	kill_score += enemy_def.score_value
 
 
 ## Kills recorded for one enemy type this run
 func kills_of(enemy_def: EnemyDef) -> int:
-	return kills.get(StringName(enemy_def.name), 0)
+	return kills.get(enemy_def.id, 0)
 
 
 ## Pick an enemy type at random, biased by each type's spawn_weight
@@ -169,7 +168,7 @@ func random_enemy_def() -> EnemyDef:
 
 ## How many times a power-up has been taken this run
 func power_up_level(power_up: PowerUp) -> int:
-	return power_up_levels.get(StringName(power_up.name), 0)
+	return power_up_levels.get(power_up.id, 0)
 
 
 ## True once a power-up has hit its max_level (max_level 0 means never)

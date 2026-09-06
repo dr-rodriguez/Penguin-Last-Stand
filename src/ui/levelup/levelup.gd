@@ -4,7 +4,7 @@ extends Control
 
 
 func _ready() -> void:
-	Game.level_up.connect(show_options)
+	Game.leveled_up.connect(show_options)
 	Game.powerup_selected.connect(_on_powerup_selected)
 
 

@@ -5,7 +5,7 @@ const PLAYER_SPEED: float = 100.0
 
 var direction: Vector2 = Vector2.ZERO
 ## Live hit-flash tween, restarted rather than stacked
-var flash_tween: Tween
+var _flash_tween: Tween
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var hurt_box: Area2D = $HurtBox
@@ -39,14 +39,14 @@ func damage_fx() -> void:
 	var hit_time: float = 0.15
 	
 	# Restart the flash instead of stacking a second one on top
-	if flash_tween != null and flash_tween.is_valid():
-		flash_tween.kill()
+	if _flash_tween != null and _flash_tween.is_valid():
+		_flash_tween.kill()
 	
 	# Node-bound so the tween dies with the player, not with the scene tree
-	flash_tween = create_tween()
+	_flash_tween = create_tween()
 	# Flash red when hit
-	flash_tween.tween_property(sprite, "modulate", Color.RED, hit_time)
-	flash_tween.tween_property(sprite, "modulate", Color.WHITE, hit_time)
+	_flash_tween.tween_property(sprite, "modulate", Color.RED, hit_time)
+	_flash_tween.tween_property(sprite, "modulate", Color.WHITE, hit_time)
 
 
 func _anim_update() -> void:
@@ -66,7 +66,7 @@ func _check_enemy_contact() -> void:
 
 	for body in hurt_box.get_overlapping_bodies():
 		# Skip pooled-but-idle enemies
-		if not "Enemy" in body.get_groups() or not body.active:
+		if not "Enemy" in body.get_groups() or not body.is_active:
 			continue
 		
 		take_damage(body.damage)

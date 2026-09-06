@@ -132,7 +132,7 @@ otherwise need to use the mouse."
 [node name="HSeparator2" type="HSeparator" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=1518984567]
 layout_mode = 2
 
-[node name="JoytstickButton" type="CheckButton" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=960435292]
+[node name="JoystickButton" type="CheckButton" parent="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer" unique_id=960435292]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Show Virtual Joystick"
@@ -159,5 +159,5 @@ layout_mode = 2
 text = "Return"
 
 [connection signal="toggled" from="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/AutoShootButton" to="." method="_on_auto_shoot_button_toggled"]
-[connection signal="toggled" from="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/JoytstickButton" to="." method="_on_joytstick_button_toggled"]
+[connection signal="toggled" from="Panel/MarginContainer/HBoxContainer/TextPanel/TextContainer/VBoxContainer/JoystickButton" to="." method="_on_joystick_button_toggled"]
 [connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/MenuContainer/VBoxContainer/RestartButton" to="." method="_on_restart_button_pressed"]

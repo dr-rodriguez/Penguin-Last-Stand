@@ -19,7 +19,7 @@ corner_radius_bottom_left = 10
 
 [sub_resource type="Resource" id="Resource_y4s1f"]
 script = ExtResource("3_cdiai")
-name = "HealthBoost"
+id = &"HealthBoost"
 texture = ExtResource("4_ddr4w")
 title = "Max Health Up"
 description = "Increase maximum health."
@@ -27,7 +27,7 @@ metadata/_custom_type_script = "uid://bulq1r4uyoc1p"
 
 [sub_resource type="Resource" id="Resource_pmbwk"]
 script = ExtResource("3_cdiai")
-name = "HealthBoost"
+id = &"HealthBoost"
 texture = ExtResource("4_ddr4w")
 title = "Max Health Up"
 description = "Increase maximum health."
@@ -35,7 +35,7 @@ metadata/_custom_type_script = "uid://bulq1r4uyoc1p"
 
 [sub_resource type="Resource" id="Resource_ydchu"]
 script = ExtResource("3_cdiai")
-name = "HealthBoost"
+id = &"HealthBoost"
 texture = ExtResource("4_ddr4w")
 title = "Max Health Up"
 description = "Increase maximum health."
