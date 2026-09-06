@@ -53,6 +53,12 @@ func calculate_time_stats() -> void:
 		_increase_difficulty()
 
 
+## Shared UI click sound, callable from any script as Game.button_click_sfx()
+func button_click_sfx() -> void:
+	sfx_player.stream = CLICK_SFX
+	sfx_player.play()
+
+
 ## Handle XP when enemies are defeated
 func _on_enemy_defeated(_n: Node) -> void:
 	Stats.player_xp += 1
@@ -147,28 +153,11 @@ func _apply_power_up(power_up: PowerUp) -> void:
 #endregion
 
 
-## Shared UI click sound, callable from any script as Game.button_click_sfx()
-func button_click_sfx() -> void:
-	sfx_player.stream = CLICK_SFX
-	sfx_player.play()
-
-
 #region Formatting functions
 ## Formats a time in seconds as MM:SS (e.g. 900 -> "15:00")
 func format_time(seconds: int) -> String:
 	@warning_ignore("INTEGER_DIVISION") 
 	return "%02d:%02d" % [seconds / 60, seconds % 60]
-
-
-## Builds a float format spec with the given decimal count (1 -> "%.1f")
-func _decimal_spec(precision: int) -> String:
-	# "%%.%df"   template
-	#  ^^        -> "%"      literal percent
-	#    ^       -> "."      literal dot
-	#     ^^     -> "1"      maxi(1, 0) substituted
-	#       ^    -> "f"      literal f
-	# result: "%.1f"
-	return "%%.%df" % maxi(precision, 0)
 
 
 ## Formats a current/max stat pair to the given decimal count (e.g. "42/50")
@@ -180,4 +169,15 @@ func format_pair(current: float, maximum: float, precision: int = 0) -> String:
 ## Formats a single stat to the given decimal count (e.g. "4.5")
 func format_stat(value: float, precision: int = 1) -> String:
 	return _decimal_spec(precision) % value
+
+
+## Builds a float format spec with the given decimal count (1 -> "%.1f")
+func _decimal_spec(precision: int) -> String:
+	# "%%.%df"   template
+	#  ^^        -> "%"      literal percent
+	#    ^       -> "."      literal dot
+	#     ^^     -> "1"      maxi(1, 0) substituted
+	#       ^    -> "f"      literal f
+	# result: "%.1f"
+	return "%%.%df" % maxi(precision, 0)
 #endregion

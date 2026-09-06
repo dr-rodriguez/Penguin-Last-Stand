@@ -122,9 +122,10 @@ size_flags_vertical = 8
 layout_mode = 2
 size_flags_vertical = 8
 text = "How To Play:
-Move to avoid enemies (WASD or Joystick)
-Aim mouse and click to shoot enemies
-Survive long enough!"
+- Move to avoid enemies (WASD or Joystick)
+- Aim mouse and click to shoot enemies
+- Esc or P to Pause
+- Survive long enough!"
 
 [connection signal="pressed" from="VBoxContainer/MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/MarginContainer/VBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]

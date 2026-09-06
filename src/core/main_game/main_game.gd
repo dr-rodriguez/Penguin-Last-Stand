@@ -3,6 +3,14 @@ extends Node
 ## Which UI currently owns the pause, so two of them can't fight over it
 enum PauseSource { NONE, START, MENU, LEVEL_UP, GAME_END, OPTIONS }
 
+const MUSIC_FADE: float = 0.8
+
+var on_cooldown: bool = false
+var pause_source: PauseSource = PauseSource.NONE
+var music_tween: Tween
+## The player that owns the audible track; the other one is free to fade in
+var music_current: AudioStreamPlayer
+
 @onready var enemy_pool: Pool = %EnemyPool
 @onready var snowball_pool: Pool = %SnowballPool
 @onready var player: CharacterBody2D = %Player
@@ -20,14 +28,6 @@ enum PauseSource { NONE, START, MENU, LEVEL_UP, GAME_END, OPTIONS }
 @onready var music_player_b: AudioStreamPlayer = %MusicPlayerB
 @onready var sfx_player: AudioStreamPlayer = %SfxPlayer
 @onready var joystick_node: VirtualJoystick = %VirtualJoystick
-
-const MUSIC_FADE: float = 0.8
-
-var on_cooldown: bool = false
-var pause_source: PauseSource = PauseSource.NONE
-var music_tween: Tween
-## The player that owns the audible track; the other one is free to fade in
-var music_current: AudioStreamPlayer
 
 
 func _ready() -> void:
@@ -62,6 +62,39 @@ func _process(_delta: float) -> void:
 		_fire_snowball()
 	elif Settings.auto_shoot and not on_cooldown:
 		_fire_snowball()
+
+
+## Play music tracks, crossfading between them
+func play_music_track(track: AudioStream) -> void:
+	# Already the audible track, nothing to do
+	if music_current != null and music_current.stream == track:
+		return
+
+	# Swap players: whatever isn't current takes the new track
+	var prev := music_current
+	var next := music_player_b if music_current == music_player_a else music_player_a
+	music_current = next
+
+	# Remove any existing music_tween
+	if music_tween != null and music_tween.is_valid():
+		music_tween.kill()
+
+	# Set the next track
+	next.stream = track
+	next.volume_linear = 0.0
+	next.play()
+
+	# Use a tween to fade in/out a music track
+	music_tween = create_tween()
+	music_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	music_tween.set_parallel(true)
+
+	# Fade out prev (first call has none), fade in next
+	if prev != null:
+		music_tween.tween_property(prev, "volume_linear", 0.0, MUSIC_FADE)
+		# Free the player once it's silent, so it's clean for the next swap
+		music_tween.finished.connect(prev.stop)
+	music_tween.tween_property(next, "volume_linear", 1.0, MUSIC_FADE)
 
 
 ## Toggle the joystick on/off if the player has it enabled
@@ -153,39 +186,6 @@ func _start_game() -> void:
 
 	# Game music
 	play_music_track(Game.GAME_MUSIC)
-
-
-## Play music tracks, crossfading between them
-func play_music_track(track: AudioStream) -> void:
-	# Already the audible track, nothing to do
-	if music_current != null and music_current.stream == track:
-		return
-
-	# Swap players: whatever isn't current takes the new track
-	var prev := music_current
-	var next := music_player_b if music_current == music_player_a else music_player_a
-	music_current = next
-
-	# Remove any existing music_tween
-	if music_tween != null and music_tween.is_valid():
-		music_tween.kill()
-
-	# Set the next track
-	next.stream = track
-	next.volume_linear = 0.0
-	next.play()
-
-	# Use a tween to fade in/out a music track
-	music_tween = create_tween()
-	music_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	music_tween.set_parallel(true)
-
-	# Fade out prev (first call has none), fade in next
-	if prev != null:
-		music_tween.tween_property(prev, "volume_linear", 0.0, MUSIC_FADE)
-		# Free the player once it's silent, so it's clean for the next swap
-		music_tween.finished.connect(prev.stop)
-	music_tween.tween_property(next, "volume_linear", 1.0, MUSIC_FADE)
 
 
 ## Clear all objects in the pool (enemies, bullets)

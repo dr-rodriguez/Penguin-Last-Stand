@@ -3,9 +3,6 @@ extends CharacterBody2D
 ## Enemy resource to load
 @export var enemy_def: EnemyDef
 
-@onready var sprite: Sprite2D = $Sprite2D
-@onready var collision_shape: CollisionShape2D = $CollisionShape2D
-
 var direction := Vector2.ZERO
 var health: float
 var speed: float
@@ -18,26 +15,8 @@ var active: bool = false
 ## Live hit-flash tween, killed before the node goes back to the pool
 var flash_tween: Tween
 
-
-## Reset any properties between acquisitions
-func _reset() -> void:
-	# Re-enable collision after being released back to the pool
-	collision_shape.set_deferred("disabled", false)
-	
-	# Drop any flash left over from the previous life
-	_kill_flash()
-
-	# Safeguard against not having enemy_def set
-	if enemy_def == null:
-		return
-	
-	health = enemy_def.health
-	speed = enemy_def.speed
-	damage = enemy_def.damage
-	
-	# Set correct sprite texture
-	sprite.texture = enemy_def.texture
-	sprite.modulate = Color.WHITE
+@onready var sprite: Sprite2D = $Sprite2D
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 
 func _ready() -> void:
@@ -104,6 +83,27 @@ func remove_enemy() -> void:
 
 	# Emit signal so we can call release
 	Game.enemy_defeated.emit(self)
+
+
+## Reset any properties between acquisitions
+func _reset() -> void:
+	# Re-enable collision after being released back to the pool
+	collision_shape.set_deferred("disabled", false)
+	
+	# Drop any flash left over from the previous life
+	_kill_flash()
+
+	# Safeguard against not having enemy_def set
+	if enemy_def == null:
+		return
+	
+	health = enemy_def.health
+	speed = enemy_def.speed
+	damage = enemy_def.damage
+	
+	# Set correct sprite texture
+	sprite.texture = enemy_def.texture
+	sprite.modulate = Color.WHITE
 
 
 ## Stop any running hit-flash so it can't write to a reused sprite

@@ -21,6 +21,34 @@ func _physics_process(_delta: float) -> void:
 	_check_enemy_contact()
 
 
+## Method for player to take damage
+func take_damage(value: float) -> void:
+	Stats.current_player_health -= value
+	damage_fx()
+	Game.player_hit.emit()
+	
+	# Play on-hit sfx
+	sfx_player.stream = Game.IMPACT_SFX
+	sfx_player.play()
+
+	# Game.game_ended is emitted from Game._check_game_end() when health hits 0
+
+
+## Damage FX indicator
+func damage_fx() -> void:
+	var hit_time: float = 0.15
+	
+	# Restart the flash instead of stacking a second one on top
+	if flash_tween != null and flash_tween.is_valid():
+		flash_tween.kill()
+	
+	# Node-bound so the tween dies with the player, not with the scene tree
+	flash_tween = create_tween()
+	# Flash red when hit
+	flash_tween.tween_property(sprite, "modulate", Color.RED, hit_time)
+	flash_tween.tween_property(sprite, "modulate", Color.WHITE, hit_time)
+
+
 func _anim_update() -> void:
 	# Don't update sprite if not moving
 	if velocity == Vector2.ZERO:
@@ -51,31 +79,3 @@ func _check_enemy_contact() -> void:
 		# Start cooldown so player doesn't take too much damage
 		damage_cooldown.start()
 		return
-
-
-## Method for player to take damage
-func take_damage(value: float) -> void:
-	Stats.current_player_health -= value
-	damage_fx()
-	Game.player_hit.emit()
-	
-	# Play on-hit sfx
-	sfx_player.stream = Game.IMPACT_SFX
-	sfx_player.play()
-
-	# Game.game_ended is emitted from Game._check_game_end() when health hits 0
-
-
-## Damage FX indicator
-func damage_fx() -> void:
-	var hit_time: float = 0.15
-	
-	# Restart the flash instead of stacking a second one on top
-	if flash_tween != null and flash_tween.is_valid():
-		flash_tween.kill()
-	
-	# Node-bound so the tween dies with the player, not with the scene tree
-	flash_tween = create_tween()
-	# Flash red when hit
-	flash_tween.tween_property(sprite, "modulate", Color.RED, hit_time)
-	flash_tween.tween_property(sprite, "modulate", Color.WHITE, hit_time)

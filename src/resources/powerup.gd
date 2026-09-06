@@ -1,5 +1,5 @@
-extends Resource
 class_name PowerUp
+extends Resource
 
 ## How the amount is folded into the stat
 enum Mode {

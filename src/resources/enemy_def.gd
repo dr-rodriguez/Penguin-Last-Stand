@@ -1,5 +1,5 @@
-extends Resource
 class_name EnemyDef
+extends Resource
 
 # Enemy definition
 

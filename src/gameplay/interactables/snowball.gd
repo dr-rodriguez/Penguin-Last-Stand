@@ -9,14 +9,6 @@ var speed: float = Stats.current_bullet_speed
 var _spent: bool = false
 
 
-## Reset any properties between acquisitions
-func _reset() -> void:
-	travelled_distance = 0.0
-	direction = Vector2.ZERO
-	speed = Stats.current_bullet_speed
-	_spent = false
-
-
 func _physics_process(delta: float) -> void:
 	# Already reported done this frame, waiting on the pool to take it back
 	if _spent:
@@ -51,6 +43,14 @@ func launch() -> void:
 	speed = Stats.current_bullet_speed
 
 
+## Reset any properties between acquisitions
+func _reset() -> void:
+	travelled_distance = 0.0
+	direction = Vector2.ZERO
+	speed = Stats.current_bullet_speed
+	_spent = false
+
+
 ## Closest live enemy in range, or null
 func _get_nearest_enemy() -> Node2D:
 	var nearest: Node2D = null
@@ -63,6 +63,7 @@ func _get_nearest_enemy() -> Node2D:
 			nearest = enemy
 	
 	return nearest
+
 
 ## Hit an enemy
 func _on_body_entered(body: Node2D) -> void:
