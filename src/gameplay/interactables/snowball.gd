@@ -57,7 +57,12 @@ func _get_nearest_enemy() -> Node2D:
 	var nearest: Node2D = null
 	var nearest_dist_sq: float = RANGE * RANGE
 	
-	for enemy in get_tree().get_nodes_in_group("Enemy"):
+	for enemy: Node2D in get_tree().get_nodes_in_group("Enemy"):
+		# The group holds idle pooled enemies too; they are parked off the field
+		# but the map wraps, so never let distance alone decide they are targets
+		if not enemy.is_active:
+			continue
+		
 		var dist_sq: float = global_position.distance_squared_to(enemy.global_position)
 		if dist_sq < nearest_dist_sq:
 			nearest_dist_sq = dist_sq

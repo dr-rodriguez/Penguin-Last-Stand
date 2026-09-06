@@ -198,8 +198,7 @@ func _clear_pool(pool: Pool, pool_str: String) -> void:
 ## Acquire snowball from pool
 func _fire_snowball() -> void:
 	# Nothing to shoot at: bail out before taking a node out of the pool
-	var enemy_nodes: Array[Node] = get_tree().get_nodes_in_group("Enemy")
-	if enemy_nodes.is_empty():
+	if not _has_live_enemy():
 		return
 	
 	# Get the scene and call it's launch method
@@ -216,6 +215,16 @@ func _fire_snowball() -> void:
 	# Start the timer
 	shoot_timer.start(Stats.current_fire_interval)
 	is_on_cooldown = true
+
+
+## True while at least one enemy is out of the pool and chasing.
+## The group holds every pooled enemy, idle ones included, so membership alone
+## says nothing about whether there is a target on the field.
+func _has_live_enemy() -> bool:
+	for n: Node in get_tree().get_nodes_in_group("Enemy"):
+		if n.is_active:
+			return true
+	return false
 
 
 ## Release a spent snowball (out of range or hit target)
